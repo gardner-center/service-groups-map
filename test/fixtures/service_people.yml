@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  service_group_id: 1
+  first_name: MyString
+  last_name: MyString
+  email: MyString
+  phone: MyString
+
+two:
+  service_group_id: 1
+  first_name: MyString
+  last_name: MyString
+  email: MyString
+  phone: MyString

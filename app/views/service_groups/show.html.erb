@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @service_group.name %>
+</p>
+
+<p>
+  <b>Address1:</b>
+  <%= @service_group.address1 %>
+</p>
+
+<p>
+  <b>Address2:</b>
+  <%= @service_group.address2 %>
+</p>
+
+<p>
+  <b>City:</b>
+  <%= @service_group.city %>
+</p>
+
+<p>
+  <b>State:</b>
+  <%= @service_group.state %>
+</p>
+
+<p>
+  <b>Zip:</b>
+  <%= @service_group.zip %>
+</p>
+
+<p>
+  <b>Phone:</b>
+  <%= @service_group.phone %>
+</p>
+
+<p>
+  <b>Website:</b>
+  <%= @service_group.website %>
+</p>
+
+<p>
+  <b>Inception date:</b>
+  <%= @service_group.inception_date %>
+</p>
+
+
+<%= link_to 'Edit', edit_service_group_path(@service_group) %> |
+<%= link_to 'Back', service_groups_path %>

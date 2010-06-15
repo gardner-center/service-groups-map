@@ -1,0 +1,23 @@
+<h1>Listing repeats</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @repeats.each do |repeat| %>
+  <tr>
+    <td><%= repeat.name %></td>
+    <td><%= link_to 'Show', repeat %></td>
+    <td><%= link_to 'Edit', edit_repeat_path(repeat) %></td>
+    <td><%= link_to 'Destroy', repeat, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Repeat', new_repeat_path %>

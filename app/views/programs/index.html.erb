@@ -1,0 +1,57 @@
+<h1>Listing programs</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Start date</th>
+    <th>End date</th>
+    <th>Start time</th>
+    <th>End time</th>
+    <th>Repeats</th>
+    <th>Range</th>
+    <th>Age min</th>
+    <th>Age max</th>
+    <th>Cost</th>
+    <th>Rating numerator</th>
+    <th>Rating denominator</th>
+    <th>Address1</th>
+    <th>Address2</th>
+    <th>City</th>
+    <th>State</th>
+    <th>Zip</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @programs.each do |program| %>
+  <tr>
+    <td><%= program.name %></td>
+    <td><%= program.description %></td>
+    <td><%= program.start_date %></td>
+    <td><%= program.end_date %></td>
+    <td><%= program.start_time %></td>
+    <td><%= program.end_time %></td>
+    <td><%= program.repeats %></td>
+    <td><%= program.range %></td>
+    <td><%= program.age_min %></td>
+    <td><%= program.age_max %></td>
+    <td><%= program.cost %></td>
+    <td><%= program.rating_numerator %></td>
+    <td><%= program.rating_denominator %></td>
+    <td><%= program.address1 %></td>
+    <td><%= program.address2 %></td>
+    <td><%= program.city %></td>
+    <td><%= program.state %></td>
+    <td><%= program.zip %></td>
+    <td><%= link_to 'Show', program %></td>
+    <td><%= link_to 'Edit', edit_program_path(program) %></td>
+    <td><%= link_to 'Destroy', program, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Program', new_program_path %>

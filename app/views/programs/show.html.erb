@@ -1,0 +1,95 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @program.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @program.description %>
+</p>
+
+<p>
+  <b>Start date:</b>
+  <%= @program.start_date %>
+</p>
+
+<p>
+  <b>End date:</b>
+  <%= @program.end_date %>
+</p>
+
+<p>
+  <b>Start time:</b>
+  <%= @program.start_time %>
+</p>
+
+<p>
+  <b>End time:</b>
+  <%= @program.end_time %>
+</p>
+
+<p>
+  <b>Repeats:</b>
+  <%= @program.repeats %>
+</p>
+
+<p>
+  <b>Range:</b>
+  <%= @program.range %>
+</p>
+
+<p>
+  <b>Age min:</b>
+  <%= @program.age_min %>
+</p>
+
+<p>
+  <b>Age max:</b>
+  <%= @program.age_max %>
+</p>
+
+<p>
+  <b>Cost:</b>
+  <%= @program.cost %>
+</p>
+
+<p>
+  <b>Rating numerator:</b>
+  <%= @program.rating_numerator %>
+</p>
+
+<p>
+  <b>Rating denominator:</b>
+  <%= @program.rating_denominator %>
+</p>
+
+<p>
+  <b>Address1:</b>
+  <%= @program.address1 %>
+</p>
+
+<p>
+  <b>Address2:</b>
+  <%= @program.address2 %>
+</p>
+
+<p>
+  <b>City:</b>
+  <%= @program.city %>
+</p>
+
+<p>
+  <b>State:</b>
+  <%= @program.state %>
+</p>
+
+<p>
+  <b>Zip:</b>
+  <%= @program.zip %>
+</p>
+
+
+<%= link_to 'Edit', edit_program_path(@program) %> |
+<%= link_to 'Back', programs_path %>

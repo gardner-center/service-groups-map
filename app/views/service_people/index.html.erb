@@ -1,0 +1,31 @@
+<h1>Listing service_people</h1>
+
+<table>
+  <tr>
+    <th>Service group</th>
+    <th>First name</th>
+    <th>Last name</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @service_people.each do |service_person| %>
+  <tr>
+    <td><%= service_person.service_group_id %></td>
+    <td><%= service_person.first_name %></td>
+    <td><%= service_person.last_name %></td>
+    <td><%= service_person.email %></td>
+    <td><%= service_person.phone %></td>
+    <td><%= link_to 'Show', service_person %></td>
+    <td><%= link_to 'Edit', edit_service_person_path(service_person) %></td>
+    <td><%= link_to 'Destroy', service_person, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Service person', new_service_person_path %>

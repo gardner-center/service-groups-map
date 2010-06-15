@@ -1,0 +1,41 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  description: MyText
+  start_date: 2010-06-15
+  end_date: 2010-06-15
+  start_time: 1
+  end_time: 
+  repeats: 1
+  range: 2010-06-15
+  age_min: 1
+  age_max: 1
+  cost: 1
+  rating_numerator: 1
+  rating_denominator: 1
+  address1: MyString
+  address2: MyString
+  city: MyString
+  state: MyString
+  zip: MyString
+
+two:
+  name: MyString
+  description: MyText
+  start_date: 2010-06-15
+  end_date: 2010-06-15
+  start_time: 1
+  end_time: 
+  repeats: 1
+  range: 2010-06-15
+  age_min: 1
+  age_max: 1
+  cost: 1
+  rating_numerator: 1
+  rating_denominator: 1
+  address1: MyString
+  address2: MyString
+  city: MyString
+  state: MyString
+  zip: MyString
