@@ -7,22 +7,82 @@
             type="text/javascript"></script>
     <script type="text/javascript">
  
-		
+    var map = null;
+    var geocoder = null;
+    var trafficInfo = null;
+    var directions = null;
+    
+    var traffic_status = 1;
+	
     function initialize() {
       if (GBrowserIsCompatible()) {
-        var map = new GMap2(document.getElementById("map_canvas"));
+        map = new GMap2(document.getElementById("map_canvas"));
         map.setCenter(new GLatLng(37.4419, -122.1419), 13);
 
-        GEvent.addListener(map, "click", function(overlay,latlng) {
+        /*GEvent.addListener(map, "click", function(overlay,latlng) {
           if (latlng) {
             var myHtml = "The GPoint value is: " + map.fromLatLngToDivPixel(latlng) + " at zoom level " + map.getZoom();
             map.openInfoWindow(latlng, myHtml);
           }
-        });
+        });*/
         map.addControl(new GSmallMapControl());
         map.addControl(new GMapTypeControl());
+
+        geocoder = new GClientGeocoder();
+        var trafficoptions = {incidents:true};
+        trafficInfo = new GTrafficOverlay(trafficoptions);
+        map.addOverlay(trafficInfo);
+        directionsPanel = document.getElementById("route");
+        directions = new GDirections(map, directionsPanel);
       }
     }
+
+    function showAddress(address) {
+      if (geocoder) {
+        geocoder.getLatLng(
+          address,
+          function(point) {
+            if (!point) {
+              alert(address + " not found");
+            } else {
+              map.setCenter(point, 13); //recenters map on address
+              markeroptions = {clickable:true, draggable:false };
+              var marker = new GMarker(point, markeroptions);
+              map.addOverlay(marker); //adds marker to map
+              marker.bindInfoWindowHtml(address); 
+              GEvent.addListener(marker, "click", function() {
+                map.panTo(point, 2);
+              });
+            }
+          }
+        );
+      }
+    }
+
+    function toggleTraffic() {
+      if (traffic_status == 1) {
+        map.removeOverlay(trafficInfo);
+        traffic_status = 0;
+      } else {
+        map.addOverlay(trafficInfo);
+        traffic_status = 1;
+      }
+    }
+
+    function setDirections(fromAddress, toAddress) {
+      directions.load("from: " + fromAddress + " to: " + toAddress);
+    }
+
+
+    //Naive implementation
+    //To be removed soon
+    function getDirections() {
+      directionsPanel = document.getElementById("route");
+      directions = new GDirections(map, directionsPanel);
+      directions.load("from: Stanford, CA to: 1600 Amphitheatre Pky, Mountain View, CA");
+    }
+
+
 
     </script>
   </head>
@@ -37,6 +97,33 @@
   <a href="categories">Program categories</a><br />
   
   <body onload="initialize()" onunload="GUnload()">
+    <!-- Adds a text field to enter an address.  geocoder locates address on map -->
+    <form action="#" onsubmit="showAddress(this.address.value); return false">
+      <p>
+        <input type="text" size="60" name="address" value="1600 Amphitheatre Pky, Mountain View, CA" />
+        <input type="submit" value="Go!" />
+      </p>
+    </form>
+    <!-- Toggle Traffic Overlay -->
+    <input type="button" value="Toggle Traffic" onClick="toggleTraffic();"/>
+
+    <!-- Directions form -->
+    <form action="#" onsubmit="setDirections(this.from.value, this.to.value); return false">
+    <table>
+     <tr><th align="right">From:&nbsp;</th>
+     <td><input type="text" size="25" id="fromAddress" name="from"
+       value="San Francisco"/></td>
+     <th align="right">&nbsp;&nbsp;To:&nbsp;</th>
+     <td align="right"><input type="text" size="25" id="toAddress" name="to"
+       value="Mountain View" /></td></tr>
+      <input name="submit" type="submit" value="Get Directions!" />
+     </td></tr>
+    </table>
+    </form>
+
+
+
     <div id="map_canvas" style="width: 500px; height: 300px"></div>
+    <div id="route" style="width: 20%; height:480px; float:right; border; 1px solid black;"></div>
   </body>
 </html>
