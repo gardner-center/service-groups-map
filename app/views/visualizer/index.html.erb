@@ -1,0 +1,48 @@
+<% @service_groups.each do |service_group| %>
+    <b><%= service_group.name %> </b>:<br />
+    <% service_group.service_persons.each do |sp| %> 
+      <%= sp.first_name %> <br />
+    <% end %>
+<% end %>
+
+    <!-- Adds a text field to enter an address.  geocoder locates address on map -->
+    <form action="#" onsubmit="showAddress(this.address.value); return false">
+      <p>
+        <input type="text" size="60" name="address" value="1600 Amphitheatre Pky, Mountain View, CA" />
+        <input type="submit" value="Go!" />
+      </p>
+    </form>
+    <!-- Toggle Traffic Overlay -->
+    <input type="button" value="Toggle Traffic" onClick="toggleTraffic();"/>
+
+    <!-- Directions form -->
+    <form action="#" onsubmit="setDirections(this.from.value, this.to.value); return false">
+    <table>
+     <tr><th align="right">From:&nbsp;</th>
+     <td><input type="text" size="25" id="fromAddress" name="from"
+       value="San Francisco"/></td>
+     <th align="right">&nbsp;&nbsp;To:&nbsp;</th>
+     <td align="right"><input type="text" size="25" id="toAddress" name="to"
+       value="Mountain View" /></td></tr>
+      <input name="submit" type="submit" value="Get Directions!" />
+     </td></tr>
+    </table>
+    </form>
+
+
+
+    <div id="map_canvas" style="width: 500px; height: 300px"></div>
+    <div id="route" style="width: 20%; height:480px; float:right; border; 1px solid black;"></div>
+
+
+
+
+  <h2>Main Data Elements</h2>
+  <a href="service_groups">Service Groups</a><br />
+  <a href="service_people">Service People</a><br />
+  <a href="programs">programs</a><br />
+  <hr />
+  <h2>Configurable data elements</h2>
+  <a href="repeats">Program schedule options</a><br />
+  <a href="styles">Program formats</a><br />
+  <a href="categories">Program categories</a><br />

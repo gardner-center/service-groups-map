@@ -56,14 +56,6 @@
     <%= f.text_field :cost %>
   </div>
   <div class="field">
-    <%= f.label :rating_numerator %><br />
-    <%= f.text_field :rating_numerator %>
-  </div>
-  <div class="field">
-    <%= f.label :rating_denominator %><br />
-    <%= f.text_field :rating_denominator %>
-  </div>
-  <div class="field">
     <%= f.label :address1 %><br />
     <%= f.text_field :address1 %>
   </div>
@@ -83,7 +75,15 @@
     <%= f.label :zip %><br />
     <%= f.text_field :zip %>
   </div>
+  <div class="field">
+    <label>Categories</label><br /> 
+    <% for category in Category.find(:all) %>
+      <%= check_box_tag "program[category_ids][]", category.id, @active_categories.include?(category.id)%>
+      <%= category.name %><br />
+    <% end %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>
 <% end %>
+

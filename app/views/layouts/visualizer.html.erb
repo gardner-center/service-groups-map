@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JGC Youth Service Group Mapping</title>
+  <%= stylesheet_link_tag :all %>
+  <%= javascript_include_tag :defaults %>
+  <%= csrf_meta_tag %>
+
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA"
+            type="text/javascript"></script>
+    <script type="text/javascript">
+ 
+    var map = null;
+    var geocoder = null;
+    var trafficInfo = null;
+    var directions = null;
+    
+    var traffic_status = 1;
+	
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        map = new GMap2(document.getElementById("map_canvas"));
+        map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+
+        /*GEvent.addListener(map, "click", function(overlay,latlng) {
+          if (latlng) {
+            var myHtml = "The GPoint value is: " + map.fromLatLngToDivPixel(latlng) + " at zoom level " + map.getZoom();
+            map.openInfoWindow(latlng, myHtml);
+          }
+        });*/
+        map.addControl(new GSmallMapControl());
+        map.addControl(new GMapTypeControl());
+
+        geocoder = new GClientGeocoder();
+        var trafficoptions = {incidents:true};
+        trafficInfo = new GTrafficOverlay(trafficoptions);
+        map.addOverlay(trafficInfo);
+        directionsPanel = document.getElementById("route");
+        directions = new GDirections(map, directionsPanel);
+      }
+    }
+
+    function showAddress(address) {
+      if (geocoder) {
+        geocoder.getLatLng(
+          address,
+          function(point) {
+            if (!point) {
+              alert(address + " not found");
+            } else {
+              map.setCenter(point, 13); //recenters map on address
+              markeroptions = {clickable:true, draggable:false };
+              var marker = new GMarker(point, markeroptions);
+              map.addOverlay(marker); //adds marker to map
+              marker.bindInfoWindowHtml(address); 
+              GEvent.addListener(marker, "click", function() {
+                map.panTo(point, 2);
+              });
+            }
+          }
+        );
+      }
+    }
+
+    function toggleTraffic() {
+      if (traffic_status == 1) {
+        map.removeOverlay(trafficInfo);
+        traffic_status = 0;
+      } else {
+        map.addOverlay(trafficInfo);
+        traffic_status = 1;
+      }
+    }
+
+    function setDirections(fromAddress, toAddress) {
+      directions.load("from: " + fromAddress + " to: " + toAddress);
+    }
+
+
+    //Naive implementation
+    //To be removed soon
+    function getDirections() {
+      directionsPanel = document.getElementById("route");
+      directions = new GDirections(map, directionsPanel);
+      directions.load("from: Stanford, CA to: 1600 Amphitheatre Pky, Mountain View, CA");
+    }
+
+
+
+    </script>
+</head>
+<body onload="initialize()" onunload="GUnload()">
+
+<%= yield %>
+
+</body>
+</html>

@@ -9,7 +9,7 @@ JgcMapping::Application.routes.draw do |map|
 
   resources :service_people
 
-  resources :service_groups
+  resources :service_groups, :has_many => :service_people
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -17,6 +17,7 @@ JgcMapping::Application.routes.draw do |map|
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
+  match '/visualize' => 'visualizer#index'
 
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase

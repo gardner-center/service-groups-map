@@ -15,6 +15,11 @@ ActiveRecord::Schema.define(:version => 20100615073432) do
     t.string "name"
   end
 
+  create_table "categories_programs", :id => false, :force => true do |t|
+    t.integer "category_id"
+    t.integer "program_id"
+  end
+
   create_table "programs", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -37,21 +42,6 @@ ActiveRecord::Schema.define(:version => 20100615073432) do
     t.string   "zip"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "programs_categories", :force => true do |t|
-    t.integer "program_id"
-    t.integer "category_id"
-  end
-
-  create_table "programs_service_persons", :force => true do |t|
-    t.integer "program_id"
-    t.integer "service_person_id"
-  end
-
-  create_table "programs_styles", :force => true do |t|
-    t.integer "program_id"
-    t.integer "style_id"
   end
 
   create_table "repeats", :force => true do |t|
@@ -82,8 +72,18 @@ ActiveRecord::Schema.define(:version => 20100615073432) do
     t.datetime "updated_at"
   end
 
+  create_table "service_persons_programs", :id => false, :force => true do |t|
+    t.integer "service_person_id"
+    t.integer "program_id"
+  end
+
   create_table "styles", :force => true do |t|
     t.string "name"
+  end
+
+  create_table "styles_programs", :id => false, :force => true do |t|
+    t.integer "style_id"
+    t.integer "program_id"
   end
 
 end

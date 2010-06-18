@@ -25,6 +25,7 @@ class ProgramsController < ApplicationController
   # GET /programs/new.xml
   def new
     @program = Program.new
+    @active_categories = []
 
     respond_to do |format|
       format.html # new.html.erb
@@ -35,6 +36,10 @@ class ProgramsController < ApplicationController
   # GET /programs/1/edit
   def edit
     @program = Program.find(params[:id])
+    @active_categories = []
+    @program.categories.each do |cat|
+      @active_categories << cat.id
+    end
   end
 
   # POST /programs
@@ -56,6 +61,7 @@ class ProgramsController < ApplicationController
   # PUT /programs/1
   # PUT /programs/1.xml
   def update
+    params[:program][:category_ids] ||= []
     @program = Program.find(params[:id])
 
     respond_to do |format|
