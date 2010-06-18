@@ -11,7 +11,8 @@
     var geocoder = null;
     var trafficInfo = null;
     var directions = null;
-    
+
+    var activities = null;
     var traffic_status = 1;
 	
     function initialize() {
@@ -37,6 +38,47 @@
       }
     }
 
+    /*function findNearby() {  
+      activities = new Array();
+      index = 0;
+      <% for activity in @nearbyActivities %>
+        activities[index] = "<%=activity.name%>"  //full description of what is to be displayed on this marker
+        index++;
+      <% end %>
+      index = 0;   
+
+      <%for activitiy in @nearbyActivities %>
+        geocoder.getLocations("<%=activity.address1%>", addToMap);
+      <%end%>
+    }*/
+
+    var index = 0;
+    function addToMap(response)
+    {
+      if(response.Status.code == 200)
+      {
+        // Retrieve the object
+        place = response.Placemark[0];
+        var city = place.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.SubAdministrativeAreaName;
+        var state = place.AddressDetails.Country.AdministrativeArea.AdministrativeAreaName;
+        var zip = place.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.PostalCode.PostalCodeNumber;
+        //var streetAddress = place.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.Thoroughfare.ThoroughfareName;
+
+
+        // Retrieve the latitude and longitude
+        point = new GLatLng(place.Point.coordinates[1], place.Point.coordinates[0]);
+
+        // Create a marker
+        marker = new GMarker(point);
+        // Add the marker to map
+        map.addOverlay(marker);
+
+        // Add name of activity to marker and bind address found by geocoder (not address in database)
+        marker.bindInfoWindowHtml('<span style="font-size: 8pt; font-family: serif;">' + activities[index] + '<br>' + response.Placemark[0].address + '</span>');
+      }
+      index++;
+    }
+
     function showAddress(address) {
       if (geocoder) {
         geocoder.getLatLng(
@@ -49,7 +91,10 @@
               markeroptions = {clickable:true, draggable:false };
               var marker = new GMarker(point, markeroptions);
               map.addOverlay(marker); //adds marker to map
-              marker.bindInfoWindowHtml(address); 
+
+              marker.bindInfoWindowHtml('<form method="get" action="http://www.google.com/search"> <div style="border:1px solid black;padding:4px;width:20em;"> <table border="0" cellpadding="0"> <tr><td> <input type="text"   name="q" size="25" maxlength="255" value="" /> <input type="submit" value="Google Search" /></td></tr> <tr><td align="center" style="font-size:75%"> <input type="checkbox" name="sitesearch" value="stanford.edu" checked /> only search Stanford.edu<br /> </td></tr></table> </div> </form>');
+
+              //marker.bindInfoWindowHtml(address); 
               GEvent.addListener(marker, "click", function() {
                 map.panTo(point, 2);
               });
@@ -71,21 +116,12 @@
 
     function setDirections(fromAddress, toAddress) {
       directions.load("from: " + fromAddress + " to: " + toAddress);
+      //directions.load("from: " + fromAddress + " to: " + toAddress, {travelMode:G_TRAVEL_MODE_WALKING});
     }
-
-
-    //Naive implementation
-    //To be removed soon
-    function getDirections() {
-      directionsPanel = document.getElementById("route");
-      directions = new GDirections(map, directionsPanel);
-      directions.load("from: Stanford, CA to: 1600 Amphitheatre Pky, Mountain View, CA");
-    }
-
-
 
     </script>
   </head>
+
   <h2>Main Pieces</h2>
   <a href="service_groups">Service Groups</a><br />
   <a href="service_people">Service People</a><br />
@@ -126,7 +162,7 @@
     <tr><th>Directions</th><th>Map</th></tr>
     <tr>
     <td valign="top"><div id="route" style="width: 275px"></div></td>
-    <td valign="top"><div id="map_canvas" style="width: 310px; height: 400px"></div></td>
+    <td valign="top"><div id="map_canvas" style="width: 800px; height: 400px"></div></td>
     </tr>
     </table> 
 
