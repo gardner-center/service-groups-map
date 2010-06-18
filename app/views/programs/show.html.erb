@@ -90,6 +90,10 @@
   <%= @program.zip %>
 </p>
 
+<p>
+  <b>Categories:</b>
+  <%= @program.categories.collect(&:name).join(', ') %>
+</p>
 
 <%= link_to 'Edit', edit_program_path(@program) %> |
 <%= link_to 'Back', programs_path %>

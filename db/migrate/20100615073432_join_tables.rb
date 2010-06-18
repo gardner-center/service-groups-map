@@ -1,16 +1,16 @@
 class JoinTables < ActiveRecord::Migration
   def self.up
-    create_table :programs_service_persons do |t|
-      t.integer :program_id
+    create_table :service_persons_programs, :id => false do |t|
       t.integer :service_person_id
-    end
-    create_table :programs_categories do |t|
       t.integer :program_id
+    end
+    create_table :categories_programs, :id => false do |t|
       t.integer :category_id
-    end
-    create_table :programs_styles do |t|
       t.integer :program_id
+    end
+    create_table :styles_programs, :id => false do |t|
       t.integer :style_id
+      t.integer :program_id
     end
   end
 
