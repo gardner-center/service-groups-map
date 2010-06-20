@@ -20,12 +20,16 @@
     <td><%= service_person.email %></td>
     <td><%= service_person.phone %></td>
     <td><%= link_to 'Show', service_person %></td>
-    <td><%= link_to 'Edit', edit_service_person_path(service_person) %></td>
-    <td><%= link_to 'Destroy', service_person, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% if session[:admin_user] == "1" %>
+      <td><%= link_to 'Edit', edit_service_person_path(service_person) %></td>
+      <td><%= link_to 'Destroy', service_person, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Service person', new_service_person_path %>
+<% if session[:admin_user] == "1" %>
+  <%= link_to 'New Service person', new_service_person_path %>
+<% end %>

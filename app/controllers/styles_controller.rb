@@ -1,6 +1,9 @@
 class StylesController < ApplicationController
   # GET /styles
   # GET /styles.xml
+
+  before_filter :authorize_admin
+
   def index
     @styles = Style.all
 

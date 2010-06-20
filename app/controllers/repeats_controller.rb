@@ -1,6 +1,9 @@
 class RepeatsController < ApplicationController
   # GET /repeats
   # GET /repeats.xml
+
+  before_filter :authorize_admin
+
   def index
     @repeats = Repeat.all
 

@@ -46,5 +46,7 @@
 </p>
 
 
-<%= link_to 'Edit', edit_service_group_path(@service_group) %> |
+<% if session[:admin_user] == "1" %>
+  <%= link_to 'Edit', edit_service_group_path(@service_group) %> |
+<% end %>
 <%= link_to 'Back', service_groups_path %>

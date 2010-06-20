@@ -44,6 +44,16 @@ ActiveRecord::Schema.define(:version => 20100615073432) do
     t.datetime "updated_at"
   end
 
+  create_table "programs_service_people", :id => false, :force => true do |t|
+    t.integer "service_person_id"
+    t.integer "program_id"
+  end
+
+  create_table "programs_styles", :id => false, :force => true do |t|
+    t.integer "style_id"
+    t.integer "program_id"
+  end
+
   create_table "repeats", :force => true do |t|
     t.string "name"
   end
@@ -72,18 +82,8 @@ ActiveRecord::Schema.define(:version => 20100615073432) do
     t.datetime "updated_at"
   end
 
-  create_table "service_persons_programs", :id => false, :force => true do |t|
-    t.integer "service_person_id"
-    t.integer "program_id"
-  end
-
   create_table "styles", :force => true do |t|
     t.string "name"
-  end
-
-  create_table "styles_programs", :id => false, :force => true do |t|
-    t.integer "style_id"
-    t.integer "program_id"
   end
 
 end

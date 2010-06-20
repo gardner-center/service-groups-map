@@ -56,16 +56,6 @@
 </p>
 
 <p>
-  <b>Rating numerator:</b>
-  <%= @program.rating_numerator %>
-</p>
-
-<p>
-  <b>Rating denominator:</b>
-  <%= @program.rating_denominator %>
-</p>
-
-<p>
   <b>Address1:</b>
   <%= @program.address1 %>
 </p>
@@ -94,6 +84,16 @@
   <b>Categories:</b>
   <%= @program.categories.collect(&:name).join(', ') %>
 </p>
+<p>
+  <b>Styles:</b>
+  <%= @program.styles.collect(&:name).join(', ') %>
+</p>
+<p>
+  <b>Service people:</b>
+  <%= @program.service_persons.collect(&:last_name).join(', ') %>
+</p>
 
-<%= link_to 'Edit', edit_program_path(@program) %> |
+<% if session[:admin_user] == "1" %>
+  <%= link_to 'Edit', edit_program_path(@program) %> |
+<% end %>
 <%= link_to 'Back', programs_path %>

@@ -1,6 +1,9 @@
 class ServicePeopleController < ApplicationController
   # GET /service_people
   # GET /service_people.xml
+
+  before_filter :authorize_admin, :except => [:index, :show]
+
   def index
     @service_people = ServicePerson.all
 

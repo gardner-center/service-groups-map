@@ -1,6 +1,9 @@
 class ServiceGroupsController < ApplicationController
   # GET /service_groups
   # GET /service_groups.xml
+
+  before_filter :authorize_admin, :except => [:index, :show]
+
   def index
     @service_groups = ServiceGroup.all
 

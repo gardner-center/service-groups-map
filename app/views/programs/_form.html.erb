@@ -82,6 +82,20 @@
       <%= category.name %><br />
     <% end %>
   </div>
+  <div class="field">
+    <label>Styles</label><br /> 
+    <% for style in Style.find(:all) %>
+      <%= check_box_tag "program[style_ids][]", style.id, @active_styles.include?(style.id)%>
+      <%= style.name %><br />
+    <% end %>
+  </div>
+  <div class="field">
+    <label>Service people</label><br /> 
+    <% for sp in ServicePerson.find(:all) %>
+      <%= check_box_tag "program[service_person_ids][]", sp.id, @active_service_people.include?(sp.id)%>
+      <%= sp.first_name %> <%= sp.last_name %><br />
+    <% end %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

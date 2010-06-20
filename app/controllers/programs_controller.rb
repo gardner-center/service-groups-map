@@ -1,6 +1,9 @@
 class ProgramsController < ApplicationController
   # GET /programs
   # GET /programs.xml
+
+  before_filter :authorize_admin, :except => [:index, :show]
+
   def index
     @programs = Program.all
 
@@ -14,6 +17,7 @@ class ProgramsController < ApplicationController
   # GET /programs/1.xml
   def show
     @program = Program.find(params[:id])
+    load_many_to_many
 
     respond_to do |format|
       format.html # show.html.erb
@@ -26,6 +30,8 @@ class ProgramsController < ApplicationController
   def new
     @program = Program.new
     @active_categories = []
+    @active_styles = []
+    @active_service_people = []
 
     respond_to do |format|
       format.html # new.html.erb
@@ -36,10 +42,7 @@ class ProgramsController < ApplicationController
   # GET /programs/1/edit
   def edit
     @program = Program.find(params[:id])
-    @active_categories = []
-    @program.categories.each do |cat|
-      @active_categories << cat.id
-    end
+    load_many_to_many
   end
 
   # POST /programs
@@ -86,4 +89,20 @@ class ProgramsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  def load_many_to_many
+    @active_categories = []
+    @program.categories.each do |cat|
+      @active_categories << cat.id
+    end
+    @active_styles = []
+    @program.styles.each do |style|
+      @active_styles << style.id
+    end
+    @active_service_people = []
+    @program.service_persons.each do |sp|
+      @active_service_people << sp.id
+    end
+  end
+
 end

@@ -13,8 +13,6 @@
     <th>Age min</th>
     <th>Age max</th>
     <th>Cost</th>
-    <th>Rating numerator</th>
-    <th>Rating denominator</th>
     <th>Address1</th>
     <th>Address2</th>
     <th>City</th>
@@ -38,20 +36,22 @@
     <td><%= program.age_min %></td>
     <td><%= program.age_max %></td>
     <td><%= program.cost %></td>
-    <td><%= program.rating_numerator %></td>
-    <td><%= program.rating_denominator %></td>
     <td><%= program.address1 %></td>
     <td><%= program.address2 %></td>
     <td><%= program.city %></td>
     <td><%= program.state %></td>
     <td><%= program.zip %></td>
     <td><%= link_to 'Show', program %></td>
-    <td><%= link_to 'Edit', edit_program_path(program) %></td>
-    <td><%= link_to 'Destroy', program, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% if session[:admin_user] == "1" %>
+      <td><%= link_to 'Edit', edit_program_path(program) %></td>
+      <td><%= link_to 'Destroy', program, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Program', new_program_path %>
+<% if session[:admin_user] == "1" %>
+  <%= link_to 'New Program', new_program_path %>
+<% end %>

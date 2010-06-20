@@ -1,6 +1,9 @@
 class CategoriesController < ApplicationController
   # GET /categories
   # GET /categories.xml
+
+  before_filter :authorize_admin
+
   def index
     @categories = Category.all
 

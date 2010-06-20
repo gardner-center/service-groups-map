@@ -1,0 +1,14 @@
+<%= form_tag "/admin/process_login", :method => :post do %>
+
+  <div class="field">
+    <%= label :login, :email %><br />
+    <%= text_field :login, :email %>
+  </div>
+  <div class="field">
+    <%= label :login, :password %><br />
+    <%= text_field :login, :password %>
+  </div>
+  <div class="actions">
+    <%= submit_tag 'Submit' %>
+  </div>
+<% end %>

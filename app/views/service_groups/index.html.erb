@@ -28,12 +28,16 @@
     <td><%= service_group.website %></td>
     <td><%= service_group.inception_date %></td>
     <td><%= link_to 'Show', service_group %></td>
-    <td><%= link_to 'Edit', edit_service_group_path(service_group) %></td>
-    <td><%= link_to 'Destroy', service_group, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% if session[:admin_user] == "1" %>
+      <td><%= link_to 'Edit', edit_service_group_path(service_group) %></td>
+      <td><%= link_to 'Destroy', service_group, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Service group', new_service_group_path %>
+<% if session[:admin_user] == "1" %>
+  <%= link_to 'New Service group', new_service_group_path %>
+<% end %>
