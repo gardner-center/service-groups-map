@@ -1,4 +1,7 @@
 JgcMapping::Application.routes.draw do |map|
+
+  match '/programs/associate' => 'programs#associate'
+
   resources :categories
 
   resources :styles

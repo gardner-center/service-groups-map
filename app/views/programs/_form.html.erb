@@ -1,3 +1,19 @@
+<img src="/images/blank-dot.png" onload="$('submit-button').hide();">
+<div class="field">
+  The service group associated with this program:<br />
+  <%= form_tag "/programs/associate", :id => "service-group-list", :method => :post, :remote => true do %>
+    <% unless @program.nil? %>
+      <input type=hidden name="program_id" value=<%= @program.id %>>
+    <% end %>
+    <select name="service_group_id" id="service_group_id" onchange="$('submit-button').click();">
+    <% for sg in ServiceGroup.all %>
+      <option value="<%= sg.id %>"><%= sg.name %></option>
+    <% end %>
+    </select>
+    <%= submit_tag "Submit Service Group", :id => "submit-button", :class => "hidden-form-button", :name => nil %>
+  <% end %>
+</div>
+
 <%= form_for(@program) do |f| %>
   <% if @program.errors.any? %>
     <div id="error_explanation">
@@ -37,7 +53,16 @@
   </div>
   <div class="field">
     <%= f.label :repeats %><br />
-    <%= f.text_field :repeats %>
+    <select id="program_repeats" name="program[repeats]">
+    <% @repeat_types = Repeat.all %>
+    <% for repeat in @repeat_types %>
+      <% if repeat.id == @program.repeats %>
+        <option value="<%= repeat.id %>" selected="selected"><%= repeat.name %></option>
+      <% else %>
+        <option value="<%= repeat.id %>"><%= repeat.name %></option>
+      <% end %>
+    <% end %>
+    </select>  
   </div>
   <div class="field">
     <%= f.label :range %><br />
@@ -89,12 +114,14 @@
       <%= style.name %><br />
     <% end %>
   </div>
-  <div class="field">
-    <label>Service people</label><br /> 
-    <% for sp in ServicePerson.find(:all) %>
-      <%= check_box_tag "program[service_person_ids][]", sp.id, @active_service_people.include?(sp.id)%>
-      <%= sp.first_name %> <%= sp.last_name %><br />
-    <% end %>
+  <div id="service-people">
+    <div class="field">
+      <label>Service people</label><br /> 
+      <% for sp in ServicePerson.limit(5) %>
+        <%= check_box_tag "program[service_person_ids][]", sp.id, @active_service_people.include?(sp.id)%>
+        <%= sp.first_name %> <%= sp.last_name %><br />
+      <% end %>
+    </div>
   </div>
   <div class="actions">
     <%= f.submit %>

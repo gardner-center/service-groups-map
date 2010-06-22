@@ -105,4 +105,28 @@ class ProgramsController < ApplicationController
     end
   end
 
+  def associate
+    #JBB should not respond to non js queries
+    #respond_to :js
+    @active_service_people = []
+    unless params[:service_group_id].nil?
+      @service_group = ServiceGroup.find(params[:service_group_id]) 
+      @service_people = ServicePerson.where(:service_group_id => @service_group.id)
+      if params[:program_id] == ""
+        @active_service_people = [] 
+      else
+        Program.find(params[:program_id]).service_persons.each do |sp|
+          @active_service_people << sp.id 
+        end
+      end
+#JBB it appears I may have to generate HTML string here to pass to js.erb file. Not clear I have access to view helpers in js.erb file
+    else
+      @service_group = ServiceGroup.first
+      @service_people = ServicePerson.where(:service_group_id => @service_group.id).limit(5)
+    end
+    #  render(:update) do |page|
+    #    page[:program_address1].value = @program.address1
+    #  end
+  end
+
 end

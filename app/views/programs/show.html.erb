@@ -32,7 +32,10 @@
 
 <p>
   <b>Repeats:</b>
-  <%= @program.repeats %>
+  <% @repeat_options = Repeat.all %>
+  <% unless @program.repeats.nil? %>
+    <%= @repeat_options[@program.repeats].name %>
+  <% end %>
 </p>
 
 <p>
