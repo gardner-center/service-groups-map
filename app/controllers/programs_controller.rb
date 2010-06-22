@@ -67,6 +67,9 @@ class ProgramsController < ApplicationController
     params[:program][:category_ids] ||= []
     @program = Program.find(params[:id])
 
+    params[:program][:cost] = "-1" if params[:program][:cost].downcase == "paid"
+    params[:program][:cost] = "0" if params[:program][:cost].downcase == "free"
+
     respond_to do |format|
       if @program.update_attributes(params[:program])
         format.html { redirect_to(@program, :notice => 'Program was successfully updated.') }
@@ -111,7 +114,7 @@ class ProgramsController < ApplicationController
     @active_service_people = []
     unless params[:service_group_id].nil?
       @service_group = ServiceGroup.find(params[:service_group_id]) 
-      @service_people = ServicePerson.where(:service_group_id => @service_group.id)
+      @service_people = @service_group.service_persons
       if params[:program_id] == ""
         @active_service_people = [] 
       else
@@ -119,10 +122,9 @@ class ProgramsController < ApplicationController
           @active_service_people << sp.id 
         end
       end
-#JBB it appears I may have to generate HTML string here to pass to js.erb file. Not clear I have access to view helpers in js.erb file
     else
       @service_group = ServiceGroup.first
-      @service_people = ServicePerson.where(:service_group_id => @service_group.id).limit(5)
+      @service_people = @service_group.service_persons
     end
     #  render(:update) do |page|
     #    page[:program_address1].value = @program.address1

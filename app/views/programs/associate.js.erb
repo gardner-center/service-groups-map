@@ -1,6 +1,15 @@
+$("service_group_id").value = "<%= @service_group.id %>"
 $("program_address1").value = "<%= @service_group.address1 %>"
 $("program_address2").value = "<%= @service_group.address2 %>"
 $("program_city").value = "<%= @service_group.city %>"
 $("program_state").value = "<%= @service_group.state %>"
 $("program_zip").value = "<%= @service_group.zip %>"
-$("service-people").replace("<div class='field'><label>Service people</label><br /><\% for sp in @service_people \%><\% end \%>JBB was down here")
+$("service-people").replace("<div id=service-people><div class='field'><label>Service people</label><br /></div>")
+<% for sp in @service_people %>
+  <% if @active_service_people.include?(sp.id) %>
+    $("service-people").insert("<input checked='checked' id='program_service_person_ids name='program[service_person_ids][]' type='checkbox' value='<%= sp.id %>' />")
+  <% else %>
+    $("service-people").insert("<input id='program_service_person_ids name='program[service_person_ids][]' type='checkbox' value='<%= sp.id %>' />")
+  <% end %> 
+  $("service-people").insert({bottom: "<%= sp.first_name %> <%= sp.last_name %><br />"})
+<% end %>
