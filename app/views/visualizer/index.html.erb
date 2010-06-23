@@ -1,10 +1,3 @@
-<% @service_groups.each do |service_group| %>
-    <b><%= service_group.name %> </b>:<br />
-    <% service_group.service_persons.each do |sp| %> 
-      <%= sp.first_name %> <br />
-    <% end %>
-<% end %>
-
     <!-- Adds a text field to enter an address.  geocoder locates address on map -->
     <form action="#" onsubmit="showAddress(this.address.value); return false">
       <p>

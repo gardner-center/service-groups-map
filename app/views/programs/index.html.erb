@@ -23,19 +23,25 @@
     <th></th>
   </tr>
 
+<% @repeat_options = Repeat.all %>
+<% @repeat_options.unshift("fill 0 index spot") %>
 <% @programs.each do |program| %>
   <tr>
     <td><%= program.name %></td>
     <td><%= program.description %></td>
     <td><%= program.start_date %></td>
     <td><%= program.end_date %></td>
-    <td><%= program.start_time %></td>
-    <td><%= program.end_time %></td>
-    <td><%= program.repeats %></td>
+    <td><%= decimal_to_24hour_time(program.start_time) %></td>
+    <td><%= decimal_to_24hour_time(program.end_time) %></td>
+    <td>
+      <% unless program.repeats.nil? %>
+        <%= @repeat_options[program.repeats].name %>
+      <% end %>
+    </td>
     <td><%= program.range %></td>
     <td><%= program.age_min %></td>
     <td><%= program.age_max %></td>
-    <td><%= program.cost %></td>
+    <td><%= display_cost(program.cost) %></td>
     <td><%= program.address1 %></td>
     <td><%= program.address2 %></td>
     <td><%= program.city %></td>

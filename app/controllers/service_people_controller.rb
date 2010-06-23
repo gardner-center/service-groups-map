@@ -5,7 +5,7 @@ class ServicePeopleController < ApplicationController
   before_filter :authorize_admin, :except => [:index, :show]
 
   def index
-    @service_people = ServicePerson.all
+    @service_people = ServicePerson.order('last_name ASC')
 
     respond_to do |format|
       format.html # index.html.erb

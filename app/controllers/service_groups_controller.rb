@@ -5,7 +5,7 @@ class ServiceGroupsController < ApplicationController
   before_filter :authorize_admin, :except => [:index, :show]
 
   def index
-    @service_groups = ServiceGroup.all
+    @service_groups = ServiceGroup.order('name ASC')
 
     respond_to do |format|
       format.html # index.html.erb

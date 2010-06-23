@@ -5,7 +5,7 @@ class CategoriesController < ApplicationController
   before_filter :authorize_admin
 
   def index
-    @categories = Category.all
+    @categories = Category.order('name ASC')
 
     respond_to do |format|
       format.html # index.html.erb

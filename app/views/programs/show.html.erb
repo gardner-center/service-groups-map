@@ -22,17 +22,18 @@
 
 <p>
   <b>Start time:</b>
-  <%= @program.start_time %>
+  <%= decimal_to_24hour_time(@program.start_time) %>
 </p>
 
 <p>
   <b>End time:</b>
-  <%= @program.end_time %>
+  <%= decimal_to_24hour_time(@program.end_time) %>
 </p>
 
 <p>
   <b>Repeats:</b>
   <% @repeat_options = Repeat.all %>
+  <% @repeat_options.unshift("fill 0 index spot") %>
   <% unless @program.repeats.nil? %>
     <%= @repeat_options[@program.repeats].name %>
   <% end %>

@@ -13,7 +13,16 @@
 
   <div class="field">
     <%= f.label :service_group_id %><br />
-    <%= f.text_field :service_group_id %>
+    <select id="service_person_service_group_id" name="service_person[service_group_id]">
+    <% @service_groups = ServiceGroup.order('name ASC') %>
+    <% for group in @service_groups %>
+      <% if group.id == @service_person.service_group_id %>
+        <option value="<%= group.id %>" selected="selected"><%= group.name %></option>
+      <% else %>
+        <option value="<%= group.id %>"><%= group.name %></option>
+      <% end %>
+    <% end %>
+    </select>  
   </div>
   <div class="field">
     <%= f.label :first_name %><br />

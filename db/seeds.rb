@@ -10,10 +10,10 @@ service_groups = ServiceGroup.create([{ :name => 'John Gardner Center', :address
 
 ServicePerson.create([{ :service_group_id => service_groups[0].id, :first_name => 'Laura',:last_name => 'Ma', :email => 'nowhere@nowhere.com', :phone => '650.723.3682'},{:service_group_id => service_groups[0].id, :first_name => 'Amy',:last_name => 'Gerstein', :email => 'nowhere@nowhere.com', :phone => '650.723.3682'}])  
 
-Program.create([{:name => 'soccer', :description => 'running around in packs', :start_date => '2010-07-01', :end_date => '2010-07-01', :start_time => 16, :end_time => 20, :repeats => 0, :range => '2010-07-01', :age_min => 8, :age_max => 14, :cost => 0, :address1 => '505 Lausen Mall',:city => 'Stanford', :state => 'CA', :zip => '94305-3083'},{:name => 'Arts and crafts', :description => 'paints and drawing', :start_date => '2010-07-08', :end_date => '2010-07-08', :start_time => 11, :end_time => 13, :repeats => 0, :range => '2010-11-10', :age_min => 8, :age_max => 14, :cost => 0, :address1 => '505 Lausen Mall',:city => 'Stanford', :state => 'CA', :zip => '94305-3083'}])
+Program.create([{:name => 'soccer', :description => 'running around in packs', :start_date => '2010-07-01', :end_date => '2010-07-01', :start_time => 16, :end_time => 20, :repeats => 1, :range => '2010-07-01', :age_min => 8, :age_max => 14, :cost => 0, :address1 => '505 Lausen Mall',:city => 'Stanford', :state => 'CA', :zip => '94305-3083'},{:name => 'Arts and crafts', :description => 'paints and drawing', :start_date => '2010-07-08', :end_date => '2010-07-08', :start_time => 11, :end_time => 13, :repeats => 2, :range => '2010-11-10', :age_min => 8, :age_max => 14, :cost => 0, :address1 => '505 Lausen Mall',:city => 'Stanford', :state => 'CA', :zip => '94305-3083'}])
 
 Repeat.create([{:name => 'Does not repeat'}, {:name => 'Daily'}, {:name => 'Mon-Fri'}, {:name => 'Mon/Wed/Fri'}, {:name => 'Tues/Thurs'}, {:name => 'Weekly'}, {:name => 'Monthly'}, {:name => 'Yearly'}])
 
 Style.create([{:name => 'Drop-in'}, {:name => 'Set schedule'}])
 
-Category.create([{:name => 'Sports'}, {:name => 'Faith-based'}, {:name => 'Academic'}, {:name => 'youth leadership'}, {:name => 'Community service'}, {:name => 'Enrichment'}, {:name => 'Arts & music'}, {:name => 'Vocational'}, {:name => 'Mentorship'}])
+Category.create([{:name => 'Sports'}, {:name => 'Faith-based'}, {:name => 'Academic'}, {:name => 'Youth leadership'}, {:name => 'Community service'}, {:name => 'Enrichment'}, {:name => 'Arts & music'}, {:name => 'Vocational'}, {:name => 'Mentorship'}])

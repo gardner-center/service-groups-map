@@ -12,9 +12,13 @@
     <th></th>
   </tr>
 
+<% @service_groups = ServiceGroup.all %>
+<% @service_groups.unshift("fill 0 index spot") %>
 <% @service_people.each do |service_person| %>
   <tr>
-    <td><%= service_person.service_group_id %></td>
+    <% unless service_person.service_group_id.nil? %>
+      <td><%= @service_groups[service_person.service_group_id].name %></td>
+    <% end %>
     <td><%= service_person.first_name %></td>
     <td><%= service_person.last_name %></td>
     <td><%= service_person.email %></td>

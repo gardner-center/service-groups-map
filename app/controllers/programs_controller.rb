@@ -5,7 +5,7 @@ class ProgramsController < ApplicationController
   before_filter :authorize_admin, :except => [:index, :show]
 
   def index
-    @programs = Program.all
+    @programs = Program.order('name ASC')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -48,6 +48,9 @@ class ProgramsController < ApplicationController
   # POST /programs
   # POST /programs.xml
   def create
+    params[:program][:cost] = "-1" if params[:program][:cost].downcase == "paid"
+    params[:program][:cost] = "0" if params[:program][:cost].downcase == "free"
+    params[:program][:cost].gsub!("$","") if params[:program][:cost][/\$/]
     @program = Program.new(params[:program])
 
     respond_to do |format|
@@ -69,6 +72,7 @@ class ProgramsController < ApplicationController
 
     params[:program][:cost] = "-1" if params[:program][:cost].downcase == "paid"
     params[:program][:cost] = "0" if params[:program][:cost].downcase == "free"
+    params[:program][:cost].gsub!("$","") if params[:program][:cost][/\$/]
 
     respond_to do |format|
       if @program.update_attributes(params[:program])

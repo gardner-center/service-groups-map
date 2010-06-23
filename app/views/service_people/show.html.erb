@@ -2,7 +2,7 @@
 
 <p>
   <b>Service group:</b>
-  <%= @service_person.service_group_id %>
+  <%= ServiceGroup.find(@service_person.service_group_id).name %>
 </p>
 
 <p>
