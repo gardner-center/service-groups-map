@@ -4,4 +4,5 @@ class Program < ActiveRecord::Base
   has_and_belongs_to_many :service_persons
   has_and_belongs_to_many :categories
   has_and_belongs_to_many :styles
+  belongs_to :zip
 end
