@@ -15,24 +15,19 @@ ActiveRecord::Schema.define(:version => 20100615073432) do
     t.string "name"
   end
 
-  create_table "categories_programs", :id => false, :force => true do |t|
-    t.integer "category_id"
-    t.integer "program_id"
-  end
-
   create_table "programs", :force => true do |t|
     t.string   "name"
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.decimal  "start_time",         :precision => 4, :scale => 2
-    t.decimal  "end_time",           :precision => 4, :scale => 2
+    t.integer  "start_time"
+    t.integer  "end_time"
     t.integer  "start_day_of_week"
     t.integer  "repeats"
     t.date     "range"
     t.integer  "age_min"
     t.integer  "age_max"
-    t.decimal  "cost",               :precision => 6, :scale => 2
+    t.integer  "cost"
     t.integer  "rating_numerator"
     t.integer  "rating_denominator"
     t.string   "address1"
@@ -44,14 +39,19 @@ ActiveRecord::Schema.define(:version => 20100615073432) do
     t.datetime "updated_at"
   end
 
-  create_table "programs_service_people", :id => false, :force => true do |t|
-    t.integer "service_person_id"
+  create_table "programs_categories", :force => true do |t|
     t.integer "program_id"
+    t.integer "category_id"
   end
 
-  create_table "programs_styles", :id => false, :force => true do |t|
-    t.integer "style_id"
+  create_table "programs_service_persons", :force => true do |t|
     t.integer "program_id"
+    t.integer "service_person_id"
+  end
+
+  create_table "programs_styles", :force => true do |t|
+    t.integer "program_id"
+    t.integer "style_id"
   end
 
   create_table "repeats", :force => true do |t|
