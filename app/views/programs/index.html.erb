@@ -1,7 +1,7 @@
 <h1>Listing programs</h1>
 
 <table>
-  <tr>
+  <tr class='heading'>
     <th>Name</th>
     <th>Description</th>
     <th>Start date</th>
@@ -26,7 +26,7 @@
 <% @repeat_options = Repeat.all %>
 <% @repeat_options.unshift("fill 0 index spot") %>
 <% @programs.each do |program| %>
-  <tr>
+  <tr class='<%= cycle("odd","even") %>'>
     <td><%= program.name %></td>
     <td><%= program.description %></td>
     <td><%= program.start_date %></td>

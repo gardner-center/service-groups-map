@@ -16,11 +16,14 @@ class ServiceGroupsController < ApplicationController
   # GET /service_groups/1
   # GET /service_groups/1.xml
   def show
-    @service_group = ServiceGroup.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @service_group }
+    begin
+      @service_group = ServiceGroup.find(params[:id])
+      respond_to do |format|
+        format.html # show.html.erb
+        format.xml  { render :xml => @service_group }
+      end
+    rescue
+      invalid_route
     end
   end
 
@@ -37,7 +40,11 @@ class ServiceGroupsController < ApplicationController
 
   # GET /service_groups/1/edit
   def edit
-    @service_group = ServiceGroup.find(params[:id])
+    begin
+      @service_group = ServiceGroup.find(params[:id])
+    rescue
+      invalid_route
+    end
   end
 
   # POST /service_groups

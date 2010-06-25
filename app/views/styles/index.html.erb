@@ -1,7 +1,7 @@
 <h1>Listing styles</h1>
 
 <table>
-  <tr>
+  <tr class='heading'>
     <th>Name</th>
     <th></th>
     <th></th>
@@ -9,7 +9,7 @@
   </tr>
 
 <% @styles.each do |style| %>
-  <tr>
+  <tr class='<%= cycle("odd","even") %>'>
     <td><%= style.name %></td>
     <td><%= link_to 'Show', style %></td>
     <td><%= link_to 'Edit', edit_style_path(style) %></td>

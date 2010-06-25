@@ -2,7 +2,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   layout 'application'
 
-
+  def invalid_route
+    redirect_to('/visualize', :notice => "Sorry, your request was not recognized")
+  end
 
 
 

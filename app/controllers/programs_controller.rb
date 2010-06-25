@@ -16,12 +16,16 @@ class ProgramsController < ApplicationController
   # GET /programs/1
   # GET /programs/1.xml
   def show
-    @program = Program.find(params[:id])
-    load_many_to_many
+    begin
+      @program = Program.find(params[:id])
+      load_many_to_many
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @program }
+      respond_to do |format|
+        format.html # show.html.erb
+        format.xml  { render :xml => @program }
+      end
+    rescue
+      invalid_route
     end
   end
 
@@ -41,8 +45,12 @@ class ProgramsController < ApplicationController
 
   # GET /programs/1/edit
   def edit
-    @program = Program.find(params[:id])
-    load_many_to_many
+    begin
+      @program = Program.find(params[:id])
+      load_many_to_many
+    rescue
+      invalid_route
+    end
   end
 
   # POST /programs

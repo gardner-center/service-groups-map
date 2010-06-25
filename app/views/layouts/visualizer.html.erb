@@ -128,6 +128,11 @@
 
 </head>
 <body onload="initialize()" onunload="GUnload()">
+<% if flash[:notice] -%>
+  <div id="error_explanation">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
 
 <%= yield %>
 
