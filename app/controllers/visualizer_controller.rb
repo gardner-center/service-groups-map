@@ -5,6 +5,7 @@ class VisualizerController < ApplicationController
 	#with forms to search for activities
 	#calculating nearby activities is an expensive operation, so hold out until the user makes a request
   def index
+    @user_zipcode = session[:user_zip] ||= "94305"
     @nearbyPrograms = Program.all #JBB placeholder for map to have something
     @service_groups = ServiceGroup.all #JBB Limit may be desirable 
     respond_to do |format|
