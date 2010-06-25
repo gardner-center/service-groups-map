@@ -42,19 +42,19 @@
       }
     }
 
-    /*function findNearby() {  
+    function drawNearbyPrograms() {
       programs = new Array();
       index = 0;
       <% for program in @nearbyPrograms %>
-        programs[index] = "<%=program.name%>"  //full description of what is to be displayed on this marker
+        programs[index] = "<%=program.name%>" //full description of what is to be displayed on this marker
         index++;
       <% end %>
-      index = 0;   
+      index = 0;
 
       <%for program in @nearbyPrograms %>
         geocoder.getLocations("<%=program.address1%>", addToMap);
       <%end%>
-    }*/
+    }
 
     var index = 0;
     function addToMap(response)

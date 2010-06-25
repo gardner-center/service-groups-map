@@ -13,14 +13,10 @@ class VisualizerController < ApplicationController
   end
 
 	#identify nearby programs here
-	def search
-		allPrograms = Program.find(:all) #JBB placeholder for map to have something
-    nearbyPrograms = []
-    
-    @service_groups = ServiceGroup.all #JBB Limit may be desirable 
-    respond_to do |format|
-      format.html # index.html.erb
-    end
+	def proximitySearch
+    zipcode = 94305
+    zip = Zip.code(zipcode)
+    @nearbyPrograms = zip.programs
 	end
 
 end

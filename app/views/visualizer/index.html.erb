@@ -1,8 +1,9 @@
+    Please enter your zipcode
     <!-- Adds a text field to enter an address.  geocoder locates address on map -->
-    <form action="#" onsubmit="showAddress(this.address.value); return false">
+    <form action="#" onsubmit="drawNearbyPrograms(); return false">
       <p>
-        <input type="text" size="60" name="address" value="1600 Amphitheatre Pky, Mountain View, CA" />
-        <input type="submit" value="Go!" />
+        <input type="text" size="60" name="address" value="94305" />
+        <input type="submit" value="Find near me!" />
       </p>
     </form>
     <!-- Toggle Traffic Overlay -->
@@ -26,16 +27,3 @@
 
     <div id="map_canvas" style="width: 500px; height: 300px"></div>
     <div id="route" style="width: 20%; height:480px; float:right; border; 1px solid black;"></div>
-
-
-
-
-  <h2>Main Data Elements</h2>
-  <a href="service_groups">Service Groups</a><br />
-  <a href="service_people">Service People</a><br />
-  <a href="programs">programs</a><br />
-  <hr />
-  <h2>Configurable data elements</h2>
-  <a href="repeats">Program schedule options</a><br />
-  <a href="styles">Program formats</a><br />
-  <a href="categories">Program categories</a><br />

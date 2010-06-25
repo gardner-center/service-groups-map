@@ -52,7 +52,13 @@ class ProgramsController < ApplicationController
     params[:program][:cost] = "0" if params[:program][:cost].downcase == "free"
     params[:program][:cost].gsub!("$","") if params[:program][:cost][/\$/]
     @program = Program.new(params[:program])
-
+    zipcode = @program.zip
+    zip = Zip.code(zipcode)
+    if(!zip.nil?)
+    {
+      @program.zip_id = zip.id
+      zip.programs.push(@program)
+    }
     respond_to do |format|
       if @program.save
         format.html { redirect_to(@program, :notice => 'Program was successfully created.') }
