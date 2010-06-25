@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  code: MyString
+  city: MyString
+  state: MyString
+  lat: 9.99
+  lon: 9.99
+
+two:
+  code: MyString
+  city: MyString
+  state: MyString
+  lat: 9.99
+  lon: 9.99
