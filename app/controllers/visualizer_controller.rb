@@ -12,6 +12,11 @@ class VisualizerController < ApplicationController
     end
   end
 
+  def new
+    @nearbyPrograms = []
+
+  end
+
 	#identify nearby programs here
 	def proximitySearch
     zipcode = 94305
