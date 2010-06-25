@@ -32,7 +32,7 @@ class Program < ActiveRecord::Base
   validates_presence_of :address1
   validates_presence_of :city
   validates_presence_of :state
-  validates :zip, :length => {:minimum => 5, :maximum => 10}
+  validates :zipcode, :length => {:minimum => 5, :maximum => 10}
   validates_associated :styles
   validates_associated :service_persons
   validates_associated :categories

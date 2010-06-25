@@ -9,6 +9,8 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+ActiveRecord::Schema.define(:version => 20100623222734) do
+
   create_table "categories", :force => true do |t|
     t.string "name"
   end
@@ -40,6 +42,7 @@
     t.string   "zipcode"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "zip_id"
   end
 
   create_table "programs_service_people", :id => false, :force => true do |t|
@@ -88,8 +91,8 @@
     t.string   "code"
     t.string   "city"
     t.string   "state"
-    t.decimal  "lat"
-    t.decimal  "lon"
+    t.decimal  "lat",        :precision => 15, :scale => 10
+    t.decimal  "lon",        :precision => 15, :scale => 10
     t.datetime "created_at"
     t.datetime "updated_at"
   end

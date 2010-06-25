@@ -3,7 +3,7 @@ $("program_address1").value = "<%= @service_group.address1 %>"
 $("program_address2").value = "<%= @service_group.address2 %>"
 $("program_city").value = "<%= @service_group.city %>"
 $("program_state").value = "<%= @service_group.state %>"
-$("program_zip").value = "<%= @service_group.zip %>"
+$("program_zipcode").value = "<%= @service_group.zip %>"
 $("service-people").replace("<div id=service-people><div class='field'><label>Service people</label><br /></div>")
 <% for sp in @service_people %>
   <% if @active_service_people.include?(sp.id) %>

@@ -19,7 +19,7 @@ class CreatePrograms < ActiveRecord::Migration
       t.string :address2
       t.string :city
       t.string :state
-      t.string :zip
+      t.string :zipcode
 
       t.timestamps
     end

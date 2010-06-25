@@ -65,14 +65,15 @@ class ProgramsController < ApplicationController
     params[:program][:end_time] = format_time(params[:program][:end_time])
     params[:program][:category_ids].count < 1 ? @no_category = true : @no_category = false
 
+    params[:program][:zip_id] = Zip.code(params[:program][:zipcode])
+
     @program = Program.new(params[:program])
-    zipcode = @program.zip
-    zip = Zip.code(zipcode)
-    if(!zip.nil?)
-    {
-      @program.zip_id = zip.id
-      zip.programs.push(@program)
-    }
+    #zip = Zip.code(@program.zipcode)
+    #unless zip.nil?
+    #{
+    #  @program.zip_id = zip.id
+      #zip.programs.push(@program) #JBB not sure what the intention was here. Jeff?
+    #}
     
     load_many_to_many
 
