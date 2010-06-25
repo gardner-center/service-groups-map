@@ -51,7 +51,7 @@
       <% end %>
       index = 0;   
 
-      <%for activitiy in @nearbyPrograms %>
+      <%for program in @nearbyPrograms %>
         geocoder.getLocations("<%=program.address1%>", addToMap);
       <%end%>
     }*/
