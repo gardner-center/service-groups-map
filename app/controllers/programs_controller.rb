@@ -16,12 +16,16 @@ class ProgramsController < ApplicationController
   # GET /programs/1
   # GET /programs/1.xml
   def show
-    @program = Program.find(params[:id])
-    load_many_to_many
+    begin
+      @program = Program.find(params[:id])
+      load_many_to_many
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @program }
+      respond_to do |format|
+        format.html # show.html.erb
+        format.xml  { render :xml => @program }
+      end
+    rescue
+      invalid_route
     end
   end
 
@@ -41,16 +45,26 @@ class ProgramsController < ApplicationController
 
   # GET /programs/1/edit
   def edit
-    @program = Program.find(params[:id])
-    load_many_to_many
+    begin
+      @program = Program.find(params[:id])
+      load_many_to_many
+    rescue
+      invalid_route
+    end
   end
 
   # POST /programs
   # POST /programs.xml
   def create
+    params[:program][:category_ids] ||= []
     params[:program][:cost] = "-1" if params[:program][:cost].downcase == "paid"
     params[:program][:cost] = "0" if params[:program][:cost].downcase == "free"
     params[:program][:cost].gsub!("$","") if params[:program][:cost][/\$/]
+    #handle time inputs
+    params[:program][:start_time] = format_time(params[:program][:start_time])
+    params[:program][:end_time] = format_time(params[:program][:end_time])
+    params[:program][:category_ids].count < 1 ? @no_category = true : @no_category = false
+
     @program = Program.new(params[:program])
     zipcode = @program.zip
     zip = Zip.code(zipcode)
@@ -59,8 +73,16 @@ class ProgramsController < ApplicationController
       @program.zip_id = zip.id
       zip.programs.push(@program)
     }
+    
+    load_many_to_many
+
     respond_to do |format|
       if @program.save
+        if @no_category
+          @program.errors.add_to_base('Please assign one or more categories.')
+          format.html { render :action => "new" }
+          format.xml  { render :xml => @program.errors, :status => :unprocessable_entity }
+        end
         format.html { redirect_to(@program, :notice => 'Program was successfully created.') }
         format.xml  { render :xml => @program, :status => :created, :location => @program }
       else
@@ -75,13 +97,20 @@ class ProgramsController < ApplicationController
   def update
     params[:program][:category_ids] ||= []
     @program = Program.find(params[:id])
+    load_many_to_many
 
     params[:program][:cost] = "-1" if params[:program][:cost].downcase == "paid"
     params[:program][:cost] = "0" if params[:program][:cost].downcase == "free"
     params[:program][:cost].gsub!("$","") if params[:program][:cost][/\$/]
+    #handle time inputs
+    params[:program][:start_time] = format_time(params[:program][:start_time])
+    params[:program][:end_time] = format_time(params[:program][:end_time])
 
     respond_to do |format|
-      if @program.update_attributes(params[:program])
+      if params[:program][:category_ids].count < 1
+        @program.errors.add_to_base('Please assign one or more categories.')
+        format.html { render :action => "edit" }
+      elsif @program.update_attributes(params[:program])
         format.html { redirect_to(@program, :notice => 'Program was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -140,5 +169,16 @@ class ProgramsController < ApplicationController
     #    page[:program_address1].value = @program.address1
     #  end
   end
+
+  def format_time(time_string = "") #JBB check on this as default value
+    if time_string.length > 0
+      time_string.downcase =~ /pm/ ? add_twelve = true : add_twelve = false
+      time_string.gsub!(":",".")
+      @numeric_time = time_string[/\d{1,2}(\.)?(\d{1,2})?/].to_f
+      @numeric_time += 12 if add_twelve
+    end
+    @numeric_time
+  end 
+  
 
 end

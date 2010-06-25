@@ -9,6 +9,7 @@ class AdminController < ApplicationController
   end
 
   def invalid_request
+    invalid_route
   end
 
   def logout

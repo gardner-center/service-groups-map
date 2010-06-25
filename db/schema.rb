@@ -9,10 +9,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100625002706) do
-
   create_table "categories", :force => true do |t|
     t.string "name"
+  end
+
+  create_table "categories_programs", :id => false, :force => true do |t|
+    t.integer "category_id"
+    t.integer "program_id"
   end
 
   create_table "programs", :force => true do |t|
@@ -20,14 +23,14 @@ ActiveRecord::Schema.define(:version => 20100625002706) do
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.integer  "start_time"
-    t.integer  "end_time"
+    t.decimal  "start_time",         :precision => 4, :scale => 2
+    t.decimal  "end_time",           :precision => 4, :scale => 2
     t.integer  "start_day_of_week"
     t.integer  "repeats"
     t.date     "range"
     t.integer  "age_min"
     t.integer  "age_max"
-    t.integer  "cost"
+    t.decimal  "cost",               :precision => 6, :scale => 2
     t.integer  "rating_numerator"
     t.integer  "rating_denominator"
     t.string   "address1"
@@ -37,22 +40,16 @@ ActiveRecord::Schema.define(:version => 20100625002706) do
     t.string   "zipcode"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "zip_id"
   end
 
-  create_table "programs_categories", :force => true do |t|
-    t.integer "program_id"
-    t.integer "category_id"
-  end
-
-  create_table "programs_service_persons", :force => true do |t|
-    t.integer "program_id"
+  create_table "programs_service_people", :id => false, :force => true do |t|
     t.integer "service_person_id"
+    t.integer "program_id"
   end
 
   create_table "programs_styles", :id => false, :force => true do |t|
-    t.integer "program_id"
     t.integer "style_id"
+    t.integer "program_id"
   end
 
   create_table "repeats", :force => true do |t|

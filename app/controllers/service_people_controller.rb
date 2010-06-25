@@ -16,11 +16,15 @@ class ServicePeopleController < ApplicationController
   # GET /service_people/1
   # GET /service_people/1.xml
   def show
-    @service_person = ServicePerson.find(params[:id])
+    begin
+      @service_person = ServicePerson.find(params[:id])
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @service_person }
+      respond_to do |format|
+        format.html # show.html.erb
+        format.xml  { render :xml => @service_person }
+      end
+    rescue
+      invalid_route
     end
   end
 
@@ -37,7 +41,11 @@ class ServicePeopleController < ApplicationController
 
   # GET /service_people/1/edit
   def edit
-    @service_person = ServicePerson.find(params[:id])
+    begin
+      @service_person = ServicePerson.find(params[:id])
+    rescue
+      invalid_route
+    end
   end
 
   # POST /service_people

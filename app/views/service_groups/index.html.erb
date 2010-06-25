@@ -1,7 +1,7 @@
 <h1>Listing service_groups</h1>
 
 <table>
-  <tr>
+  <tr class='heading'>
     <th>Name</th>
     <th>Address1</th>
     <th>Address2</th>
@@ -17,7 +17,7 @@
   </tr>
 
 <% @service_groups.each do |service_group| %>
-  <tr>
+  <tr class='<%= cycle("odd","even") %>'>
     <td><%= service_group.name %></td>
     <td><%= service_group.address1 %></td>
     <td><%= service_group.address2 %></td>

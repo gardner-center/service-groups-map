@@ -1,6 +1,6 @@
 body { background-color: #fff; color: #333; }
 
-body, p, ol, ul, td {
+body, p, ol, ul {
   font-family: verdana, arial, helvetica, sans-serif;
   font-size:   13px;
   line-height: 18px;
@@ -53,4 +53,20 @@ div.field, div.actions {
 #error_explanation ul li {
   font-size: 12px;
   list-style: square;
+}
+
+tr.heading {
+  background-color: gray;
+}
+tr.odd {
+  background-color: #E6F2FF;
+}
+tr.even {
+  background-color: white;
+}
+td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   13px;
+  line-height: 18px;
+  text-align: center;
 }

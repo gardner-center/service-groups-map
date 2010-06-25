@@ -1,7 +1,7 @@
 <h1>Listing categories</h1>
 
 <table>
-  <tr>
+  <tr class='heading'>
     <th>Name</th>
     <th></th>
     <th></th>
@@ -9,7 +9,7 @@
   </tr>
 
 <% @categories.each do |category| %>
-  <tr>
+  <tr class='<%= cycle("odd","even") %>'>
     <td><%= category.name %></td>
     <td><%= link_to 'Show', category %></td>
     <td><%= link_to 'Edit', edit_category_path(category) %></td>

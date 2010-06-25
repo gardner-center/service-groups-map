@@ -1,7 +1,7 @@
 <h1>Listing repeats</h1>
 
 <table>
-  <tr>
+  <tr class='heading'>
     <th>Name</th>
     <th></th>
     <th></th>
@@ -9,7 +9,7 @@
   </tr>
 
 <% @repeats.each do |repeat| %>
-  <tr>
+  <tr class='<%= cycle("odd","even") %>'>
     <td><%= repeat.name %></td>
     <td><%= link_to 'Show', repeat %></td>
     <td><%= link_to 'Edit', edit_repeat_path(repeat) %></td>
