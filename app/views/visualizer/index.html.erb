@@ -10,7 +10,7 @@
     <input type="button" value="Toggle Traffic" onClick="toggleTraffic();"/>
 
     <!-- Directions form -->
-    <form action="#" onsubmit="setDirections(this.from.value, this.to.value); return false">
+    <form action="#" onsubmit="calcRoute(this.from.value, this.to.value); return false">
     <table>
      <tr><th align="right">From:&nbsp;</th>
      <td><input type="text" size="25" id="fromAddress" name="from"
@@ -26,4 +26,4 @@
 
 
     <div id="map_canvas" style="width: 500px; height: 300px"></div>
-    <div id="route" style="width: 20%; height:480px; float:right; border; 1px solid black;"></div>
+    <div id="directionsPanel" style="width: 20%; height:480px;"></div>
