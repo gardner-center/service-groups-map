@@ -70,3 +70,18 @@ td {
   line-height: 18px;
   text-align: center;
 }
+td.left-column {
+  width: 200px;
+  vertical-align: top;
+  text-align: left;
+}
+td.middle-column {
+  width: 100%;
+  vertical-align: top;
+  text-align: left;
+}
+td.right-column {
+  width: 150px;
+  vertical-align: top;
+  text-align: left;
+}

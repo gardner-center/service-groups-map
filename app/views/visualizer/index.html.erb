@@ -1,8 +1,10 @@
-    Please enter your zipcode
+<table><tr>
+  <td id="left-column" class="left-column">
+    Basic search<br />
     <!-- Adds a text field to enter an address.  geocoder locates address on map -->
     <form action="#" onsubmit="drawNearbyPrograms(); return false">
       <p>
-        <input type="text" size="60" name="address" value="94305" />
+        Zip: <input type="text" size="10" name="address" value="<%= session[:zip_code] %>" />
         <input type="submit" value="Find near me!" />
       </p>
     </form>
@@ -11,19 +13,18 @@
 
     <!-- Directions form -->
     <form action="#" onsubmit="setDirections(this.from.value, this.to.value); return false">
-    <table>
-     <tr><th align="right">From:&nbsp;</th>
-     <td><input type="text" size="25" id="fromAddress" name="from"
-       value="San Francisco"/></td>
-     <th align="right">&nbsp;&nbsp;To:&nbsp;</th>
-     <td align="right"><input type="text" size="25" id="toAddress" name="to"
-       value="Mountain View" /></td></tr>
-      <input name="submit" type="submit" value="Get Directions!" />
-     </td></tr>
-    </table>
+       From: <input type="text" size="20" id="fromAddress" name="from"
+         value="San Francisco"/><br />
+       To: <input type="text" size="25" id="toAddress" name="to"
+         value="Mountain View" /><br />
+        <input name="submit" type="submit" value="Get Directions!" />
     </form>
-
-
-
-    <div id="map_canvas" style="width: 500px; height: 300px"></div>
+  </td>
+  <td id="middle-column" class="middle-column">
+    <div id="map_canvas" style="width: 100%; height: 400px"></div>
     <div id="route" style="width: 20%; height:480px; float:right; border; 1px solid black;"></div>
+  </td>
+  <td id="right-column" class="right-column">
+    <a href="http://jgc.stanford.edu">Other resources</a> availabe from the John Gardner Center at Stanford University
+  </td>
+</tr></table>
