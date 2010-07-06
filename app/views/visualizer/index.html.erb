@@ -12,17 +12,17 @@
     <input type="button" value="Toggle Traffic" onClick="toggleTraffic();"/>
 
     <!-- Directions form -->
-    <form action="#" onsubmit="setDirections(this.from.value, this.to.value); return false">
+    <form action="#" onsubmit="calcRoute(this.from.value, this.to.value); return false">
        From: <input type="text" size="20" id="fromAddress" name="from"
          value="San Francisco"/><br />
-       To: <input type="text" size="25" id="toAddress" name="to"
+       To: <input type="text" size="20" id="toAddress" name="to"
          value="Mountain View" /><br />
         <input name="submit" type="submit" value="Get Directions!" />
     </form>
   </td>
   <td id="middle-column" class="middle-column">
     <div id="map_canvas" style="width: 100%; height: 400px"></div>
-    <div id="route" style="width: 20%; height:480px; float:right; border; 1px solid black;"></div>
+    <div id="directionsPanel" style="width: 20%; height:480px;"></div>
   </td>
   <td id="right-column" class="right-column">
     <a href="http://jgc.stanford.edu">Other resources</a> availabe from the John Gardner Center at Stanford University

@@ -14,7 +14,7 @@ class VisualizerController < ApplicationController
   end
 
   def new
-    @nearbyPrograms = []
+    @nearbyPrograms = Program.all
 
   end
 
