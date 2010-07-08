@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="keywords" content="Stanford" />
+  <meta name="description" content="Stanford Office of XXX." />
+  <meta name="robots" content="all" />
   <title>JgcMapping</title>
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag :defaults %>
@@ -8,10 +11,28 @@
 </head>
 <body>
 
+
+<div id="header">
+  <div id="homepageLink"><h1>Data View</h1></div>
+</div>
+
+<div id="nav">
+  <ul>
+    <li id="home">Service Group Mapping</li>
+  </ul>
+</div>	
+
 <%= yield %>
 
-<p>
-<%= link_to "Front page", "/visualize" %>
-</p>
+
+<div id="footer">
+  <ul>
+    <li>This Web application is developed and maintained by the <a href="http://jgc.stanford.edu/">John Gardner Center</a> at Stanford University</li>
+  </ul>
+  <div id="copyright" class="vcard">
+  &copy; <span class="fn org">John Gardner Center</span>.  All Rights Reserved.  <span class="adr"><span class="locality">Stanford</span>, <span class="region">CA</span>  <span class="postal-code">94305</span></span>. <span class="tel">(650) 723-1137</span>.  <a href="http://www.stanford.edu/home/atoz/terms.html">Terms of Use</a>
+  </div>
+</div>
+
 </body>
 </html>
