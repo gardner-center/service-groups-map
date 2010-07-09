@@ -65,10 +65,13 @@ class ProgramsController < ApplicationController
     params[:program][:end_time] = format_time(params[:program][:end_time])
     params[:program][:category_ids].count < 1 ? @no_category = true : @no_category = false
 
-    zip_obj = Zip.code(params[:program][:zipcode])
+    zipcode = params[:program][:zipcode]
+    zipcode = zipcode[0,5]
+    zip_obj = Zip.code(zipcode)
     params[:program][:zip_id] = zip_obj.id unless zip_obj.nil?
 
     @program = Program.new(params[:program])
+    zip_obj.programs.push(@program)
     #zip = Zip.code(@program.zipcode)
     #unless zip.nil?
     #{
