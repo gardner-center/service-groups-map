@@ -1,31 +1,106 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>JGC Youth Service Group Mapping</title>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults %>
-  <%= csrf_meta_tag %>
+<table><tr>
+  <td id="left-column" class="left-column">
+    <p>&nbsp;</p>
+    <span id="basic-search">Basic program search</span><br />
 
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA" type="text/javascript"></script>
-           
-    <script type="text/javascript">
+    <!-- The following code is a test.  If user enters a zipcode, visualizer should redirect to proximitySearch page -->
+    <%= form_tag( { :controller => "visualizer", :action => "proximitySearch" }, :method => "get")%>
+    <%= text_field "input", "zipcode", :size => 15%>
+    <%= submit_tag "Test", :name => "submit" %>
+    <!-- End test code region -->
+    
 
-    /*function drawNearbyPrograms() {
-      programs = new Array();
-      index = 0;
-      <% for program in @nearbyPrograms %>
-        programs[index] = "<%=program.name%>" //full description of what is to be displayed on this marker
-        index++;
-      <% end %>
-      index = 0;
+    <!-- Adds a text field to enter an address.  geocoder locates address on map -->
+    <!-- JBB drawNearbyPrograms will have to see if "any" has been selected for categories or repeats -->
+    <form action="#" onsubmit="drawNearbyPrograms(this.address.value); return false">
+      <p>
+        Zip:<input type="text" size="10" name="address" value="<%= @user_zipcode %>" /><br />
+        Age min:<input type="text" size="2" name="age_min" value="8" />
+        max:<input type="text" size="2" name="age_max" value="14" /><br />
+        Type: <input id="category_all" name="category_all" type="checkbox" value="1" checked="checked" onclick="$('category_list').toggle(); return true;"/>Any<br /> 
 
-      <%for program in @nearbyPrograms %>
-        geocoder.getLocations("<%=program.address1%>", addToMap);
-      <%end%>
-    }*/
+        <div id="category_list" style="display: none;">
+          <% for category in Category.find(:all) %>
+            <%= check_box_tag "program[category_ids][]", category.id %>
+            <%= category.name %><br />
+          <% end %>
+        </div>
+        Day(s) offered:
+        <select id="program_repeats" name="program[repeats]">
+          <option value="any" selected="selected">Any day</option>
+          <% @repeat_types = Repeat.all %>
+          <% for repeat in @repeat_types %>
+            <option value="<%= repeat.id %>"><%= repeat.name %></option>
+          <% end %>
+        </select>  
+        <br />
+        Start time:
+        <select id="start_time" name="start_time">
+          <option value="any" selected="selected">Any time</option>
+          <option value="5">5 AM</option>
+          <option value="6">6 AM</option>
+          <option value="7">7 AM</option>
+          <option value="8">8 AM</option>
+          <option value="9">9 AM</option>
+          <option value="10">10 AM</option>
+          <option value="11">11 AM</option>
+          <option value="12">12 pM</option>
+          <option value="13">1 PM</option>
+          <option value="14">2 PM</option>
+          <option value="15">3 PM</option>
+          <option value="16">4 PM</option>
+          <option value="17">5 PM</option>
+          <option value="18">6 PM</option>
+          <option value="19">7 PM</option>
+          <option value="20">8 PM</option>
+          <option value="21">9 PM</option>
+        </select>  <br />
+        End time:
+        <select id="end_time" name="end_time">
+          <option value="any" selected="selected">Any time</option>
+          <option value="5">5 AM</option>
+          <option value="6">6 AM</option>
+          <option value="7">7 AM</option>
+          <option value="8">8 AM</option>
+          <option value="9">9 AM</option>
+          <option value="10">10 AM</option>
+          <option value="11">11 AM</option>
+          <option value="12">12 pM</option>
+          <option value="13">1 PM</option>
+          <option value="14">2 PM</option>
+          <option value="15">3 PM</option>
+          <option value="16">4 PM</option>
+          <option value="17">5 PM</option>
+          <option value="18">6 PM</option>
+          <option value="19">7 PM</option>
+          <option value="20">8 PM</option>
+          <option value="21">9 PM</option>
+        </select>  
 
-    </script>
 
+        <br /><br />
+        <input type="submit" value="Find Programs" />
+      </p>
+    </form>
+    <!-- Toggle Traffic Overlay -->
+    <hr />
+    <input type="button" value="Toggle Traffic" onClick="toggleTraffic();"/>
 
-</head>
-<body onload="initialize()" onunload="GUnload()">
+    <!-- Directions form -->
+    <form action="#" onsubmit="calcRoute(this.from.value, this.to.value); return false">
+       From: <input type="text" size="20" id="fromAddress" name="from"
+         value="San Francisco"/><br />
+       To: <input type="text" size="20" id="toAddress" name="to"
+         value="Mountain View" /><br />
+        <input name="submit" type="submit" value="Get Directions!" />
+    </form>
+  </td>
+  <td id="middle-column" class="middle-column">
+    <div id="map_canvas" style="width: 100%; height: 400px"></div>
+    <div id="directionsPanel" style="width: 100%; height:100%;"></div>
+  </td>
+  <td id="right-column" class="right-column">
+    <p>&nbsp;</p>
+    <a href="http://jgc.stanford.edu">Other resources</a> availabe from the John Gardner Center at Stanford University
+  </td>
+</tr></table>
