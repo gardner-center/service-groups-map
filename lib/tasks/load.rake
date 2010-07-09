@@ -21,8 +21,8 @@ namespace :load do
             :code => info[1][1,info[1].size-2],
             :state => info[2][1,info[2].size-2],
             :city => info[3][1,info[3].size-2],
-            :lat => info[4],
-            :lon => info[5])
+            :lon => info[4],
+            :lat => info[5])
         end
       end
       announce "Loaded %5d zip codes in (%2dm %2.0fs)" % [Zip.count, *time.real.divmod(60)]

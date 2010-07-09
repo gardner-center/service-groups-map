@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100623222734) do
+ActiveRecord::Schema.define(:version => 20100709004405) do
 
   create_table "categories", :force => true do |t|
     t.string "name"
@@ -44,6 +44,8 @@ ActiveRecord::Schema.define(:version => 20100623222734) do
     t.datetime "updated_at"
     t.integer  "zip_id"
   end
+
+  add_index "programs", ["zipcode"], :name => "index_programs_on_zipcode"
 
   create_table "programs_service_people", :id => false, :force => true do |t|
     t.integer "service_person_id"
@@ -96,5 +98,7 @@ ActiveRecord::Schema.define(:version => 20100623222734) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "zips", ["code"], :name => "index_zips_on_code"
 
 end
