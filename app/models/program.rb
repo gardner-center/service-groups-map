@@ -6,7 +6,7 @@ class Program < ActiveRecord::Base
   has_and_belongs_to_many :styles
   belongs_to :zips
 
-  named_scope :within_miles_of_zip, lambda{|radius, zip|
+  scope :within_miles_of_zip, lambda{|radius, zip|
 
     area = zip.area_for(radius)
 

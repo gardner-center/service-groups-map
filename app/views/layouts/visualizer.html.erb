@@ -97,6 +97,13 @@
 
 </head>
 <body onload="initialize()" onunload="GUnload()">
+
+<div id="nav">
+  <ul>
+    <li id="home">Youth programs in zip code: <%= @user_zipcode %></li>
+  </ul>
+</div>	
+
 <% if flash[:notice] -%>
   <div id="error_explanation">
     <%= flash[:notice] %>
@@ -104,6 +111,15 @@
 <% end %>
 
 <%= yield %>
+
+<div id="footer">
+  <ul>
+    <li>This Web application is developed and maintained by the <a href="http://jgc.stanford.edu/">John Gardner Center</a> at Stanford University</li>
+  </ul>
+  <div id="copyright" class="vcard">
+  &copy; <span class="fn org">John Gardner Center</span>.  All Rights Reserved.  <span class="adr"><span class="locality">Stanford</span>, <span class="region">CA</span>  <span class="postal-code">94305</span></span>. <span class="tel">(650) 723-1137</span>.  <a href="http://www.stanford.edu/home/atoz/terms.html">Terms of Use</a>
+  </div>
+</div>
 
 </body>
 </html>
