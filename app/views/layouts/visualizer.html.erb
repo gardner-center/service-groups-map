@@ -45,7 +45,7 @@
 
 		function drawNearbyPrograms()
 		{
-			<%for program in @nearbyPrograms%>
+      <%for program in @nearbyPrograms%>
 				showAddress("<%=program.address1=%> " + "<%=program.city=%> " + "<%=program.state=%> " + "<%=program.zipcode=%>");
 			<%end%>
 		}

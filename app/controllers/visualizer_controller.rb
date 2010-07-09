@@ -22,8 +22,12 @@ class VisualizerController < ApplicationController
 	#identify nearby programs here
   #JBB - value type coming in the form field will be a string "94305".to_i to convert to int
 	def proximitySearch
-    zipcode = 94305
-    @nearbyPrograms = Zip.code(zipcode).programs
+    #zipcode = params[:input][:zipcode]
+    zipcode = params[:address]
+    if(zipcode.length >=5)
+      @nearbyPrograms = Zip.code(zipcode).programs
+    else @nearbyPrograms = []
+    end
 	end
 
 end
