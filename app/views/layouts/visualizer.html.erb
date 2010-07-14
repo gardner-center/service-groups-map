@@ -14,29 +14,49 @@
 
   <script type="text/javascript">
 
-	var directionDisplay;
-        var directionsService = new google.maps.DirectionsService();
-        var map;
-	var geocoder = null;
-	var trafficInfo = null;
-	var trafficStatus = 1;
+    var directionDisplay;
+    var directionsService = new google.maps.DirectionsService();
+    var map;
+    var geocoder = null;
+    var trafficInfo = null;
+    var trafficStatus = 1;
 
-		function initialize() {
-		  directionsDisplay = new google.maps.DirectionsRenderer();
-		  var location_to_show = new google.maps.LatLng(<%= @loc.lat %>, -<%= @loc.lon %>);
-		  var myOptions = {
-		    zoom:13,
-		    mapTypeId: google.maps.MapTypeId.ROADMAP,
-		    center: location_to_show
-		  }
-		  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-		  directionsDisplay.setMap(map);
-		  directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+      function initialize() {
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        var location_to_show = new google.maps.LatLng(<%= @loc.lat %>, -<%= @loc.lon %>);
+        var myOptions = {
+          zoom:13,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          center: location_to_show
+        }
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        directionsDisplay.setMap(map);
+        directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
-	          geocoder = new google.maps.Geocoder();
-		  trafficInfo = new google.maps.TrafficLayer();
-		  trafficInfo.setMap(map);
-		}
+        <% for program in @nearbyPrograms %>
+          var marker = new google.maps.Marker({
+            position: location_to_show,
+            map: map,
+            title: "<%= program.name %>"
+          });
+          google.maps.event.addListener(marker, 'click', function() {
+            map.setZoom(8);
+          });
+        <% end %>
+
+
+
+
+
+
+
+
+
+
+        geocoder = new google.maps.Geocoder();
+        trafficInfo = new google.maps.TrafficLayer();
+        trafficInfo.setMap(map);
+      }
 
     function toggleTraffic() {
       if (trafficStatus == 1) {

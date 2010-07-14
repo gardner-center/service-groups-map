@@ -3,15 +3,6 @@
     <p>&nbsp;</p>
     <span id="basic-search">Basic program search</span><br />
 
-    <!-- The following code is a test.  If user enters a zipcode, visualizer should redirect to proximitySearch page -->
-    <!-- so that proximitySearch function in visualizer controller can calculate @nearbyPrograms variable -->
-    <!-- Currently, nearbyPrograms is based on 94305 or a cookie, not on user input -->
-    <%= form_tag( { :controller => "visualizer", :action => "proximitySearch" }, :method => "get")%>
-    <%= text_field "input", "zipcode", :size => 15%>
-    <%= submit_tag "Test", :name => "submit" %>
-    <!-- Bug: when clicking "Find Near Me" button, page still redirects to proximitySearch.  Only "Test" button should cause redirect  -->
-    <!-- End test code region -->
-
     <%= form_tag "/visualize/find_programs", :id => "service-group-list", :method => :post do %>
     <!--JBB<form action="#" onsubmit="drawNearbyPrograms(this.address.value); return false">JBB-->
       <p>

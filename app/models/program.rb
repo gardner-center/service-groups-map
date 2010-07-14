@@ -6,6 +6,8 @@ class Program < ActiveRecord::Base
   has_and_belongs_to_many :styles
   belongs_to :zips
 
+  before_save :create_formatted_address, :get_lat_lon
+
   scope :within_miles_of_zip, lambda{|radius, zip|
 
     area = zip.area_for(radius)
@@ -51,6 +53,35 @@ class Program < ActiveRecord::Base
 
   def within_miles(radius)
     self.class.within_miles_of_zip(radius, zip)
+  end
+
+  def create_formatted_address
+    self.formatted_address = self.address1
+    unless self.address2.nil?
+      self.formatted_address += " " + self.address2 + ", "
+    else
+      self.formatted_address += ", "
+    end
+    self.formatted_address += self.city + ", " + self.state + ", " + self.zipcode + ", USA"
+  end
+
+
+  ###This method is called anytime a program is created or updated and it uses the google maps API
+  ###to insert lat and lon values into the program db record
+  def get_lat_lon
+    begin
+      require 'net/http'
+      uri1 = "maps.google.com"
+      uri2 = "/maps/api/geocode/json?address=#{self.formatted_address.gsub(/\s/,'+')}&sensor=false"
+      json_lat_lon = Net::HTTP.get_response(uri1,uri2)
+      @json_lat_lon = ActiveSupport::JSON.decode json_lat_lon.body
+      if @json_lat_lon["status"] == "OK"
+        self.lat = @json_lat_lon["results"][0]["geometry"]["location"]["lat"]
+        self.lon = @json_lat_lon["results"][0]["geometry"]["location"]["lng"]
+      end
+    rescue
+      errors.add(:lat, "problem retrieving lat/long")
+    end
   end
 
 end

@@ -7,8 +7,9 @@ class VisualizerController < ApplicationController
         #JBB - caching, prefetching?
   def index
     @user_zipcode = session[:user_zip] ||= "94305"
-    @nearbyPrograms = Zip.code(@user_zipcode).programs #JBB placeholder for map to have something
-    @service_groups = ServiceGroup.all #JBB Limit may be desirable 
+    user_zip_like = @user_zipcode + "%"
+    @nearbyPrograms = Program.where('zipcode like ?',user_zip_like)
+    #@service_groups = ServiceGroup.all #JBB Limit may be desirable 
     respond_to do |format|
       format.html 
     end
