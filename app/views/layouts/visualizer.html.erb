@@ -21,42 +21,55 @@
     var trafficInfo = null;
     var trafficStatus = 1;
 
-      function initialize() {
-        directionsDisplay = new google.maps.DirectionsRenderer();
-        var location_to_show = new google.maps.LatLng(<%= @loc.lat %>, -<%= @loc.lon %>);
-        var myOptions = {
-          zoom:13,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          center: location_to_show
-        }
-        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-        directionsDisplay.setMap(map);
-        directionsDisplay.setPanel(document.getElementById("directionsPanel"));
-
-        <% for program in @nearbyPrograms %>
-          var marker = new google.maps.Marker({
-            position: location_to_show,
-            map: map,
-            title: "<%= program.name %>"
-          });
-          google.maps.event.addListener(marker, 'click', function() {
-            map.setZoom(8);
-          });
-        <% end %>
-
-
-
-
-
-
-
+    function initialize() {
+      directionsDisplay = new google.maps.DirectionsRenderer();
+      var location_to_show = new google.maps.LatLng(<%= @loc.lat %>, -<%= @loc.lon %>);
+      var myOptions = {
+        zoom:13,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: location_to_show
+      }
+      map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+      directionsDisplay.setMap(map);
+      directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
 
 
         geocoder = new google.maps.Geocoder();
         trafficInfo = new google.maps.TrafficLayer();
         trafficInfo.setMap(map);
-      }
+    }
+
+    function showOnMap(lat,lon,name)
+    {
+      var program_location = new google.maps.LatLng(lat,lon);
+      var marker = new google.maps.Marker({
+        position: program_location,
+        map: map,
+        title: name
+      });
+      
+      var contentString = "<div class='popUp'><span class='popUpTop'>" + name + "</span><br />" + "JBB was here</div>";
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+
+      google.maps.event.addListener(marker, 'click', function() {
+        //map.setZoom(8);
+        infowindow.open(map,marker);
+      });
+    }
+
+
+    function drawPrograms()
+    {
+      <% unless @nearbyPrograms.nil? %>
+        <% for program in @nearbyPrograms %>
+          showOnMap(<%= program.lat %>, <%= program.lon %>,"<%= program.name %>");
+        <% end %>
+      <% end %>
+    }
+
 
     function toggleTraffic() {
       if (trafficStatus == 1) {
@@ -68,62 +81,28 @@
       }
     }
 
-		function drawNearbyPrograms()
-		{
-			<% unless @nearbyPrograms.nil? %>
-                          <%for program in @nearbyPrograms%>
-				showAddress("<%=program.address1=%> " + "<%=program.city=%> " + "<%=program.state=%> " + "<%=program.zipcode=%>");
-			  <%end%>
-                        <% end %>
-		}
 
-		function showAddress(address)
-		{
-	    if (geocoder) 
-			{
-	      geocoder.geocode( { 'address': address}, addToMap );
-	    }
-		}
-
-		function addToMap(results, status)
-    {
-      if(status == google.maps.GeocoderStatus.OK)
-      {
-        map.setCenter(results[0].geometry.location);
-        var marker = new google.maps.Marker( {map: map, position: results[0].geometry.location} );
-				var description = '<form method="get" action="http://www.google.com/search"> <div style="border:1px solid black;padding:4px;width:20em;"> <table border="0" cellpadding="0"> <tr><td> <input type="text"   name="q" size="25" maxlength="255" value="" /> <input type="submit" value="Google Search" /></td></tr> <tr><td align="center" style="font-size:75%"> <input type="checkbox" name="sitesearch" value="stanford.edu" checked /> only search Stanford.edu<br /> </td></tr></table> </div> </form>';
-				var infowindow = new google.maps.InfoWindow( {content: description} );
-				google.maps.event.addListener(marker, 'click', function () {
-					//infowindow.setContent(this.html);
-					infowindow.open(map, marker);
-				});
-      }
-      else
-      {
-        alert("Geocode was not successful for the following reason: " + status);
-      }
-    }
   
-		function calcRoute(fromAddress, toAddress) {
-		  var start = "San Francisco";
-		  var end = "Los Angeles";
-		  var request = {
-		      origin:fromAddress, 
-		      destination:toAddress,
-		      travelMode: google.maps.DirectionsTravelMode.DRIVING
-		  };
-		  directionsService.route(request, function(response, status) {
-		    if (status == google.maps.DirectionsStatus.OK) {
-		      directionsDisplay.setDirections(response);
-		    }
-		  });
-		}
+    function calcRoute(fromAddress, toAddress) {
+      var start = "San Francisco";
+      var end = "Los Angeles";
+      var request = {
+          origin:fromAddress, 
+          destination:toAddress,
+          travelMode: google.maps.DirectionsTravelMode.DRIVING
+      };
+      directionsService.route(request, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+        }
+      });
+    }
 
     </script>
 
 
 </head>
-<body onload="initialize()" onunload="GUnload()">
+<body onload="initialize(); drawPrograms()">
 
 <div id="nav">
   <ul>

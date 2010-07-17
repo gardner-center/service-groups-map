@@ -45,7 +45,10 @@ ActiveRecord::Schema.define(:version => 20100709004405) do
     t.string   "lon"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "zip_id"
   end
+
+  add_index "programs", ["zipcode"], :name => "index_programs_on_zipcode"
 
   create_table "programs_service_people", :id => false, :force => true do |t|
     t.integer "service_person_id"

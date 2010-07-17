@@ -41,4 +41,12 @@ li {margin: 0 0 .5em 2em;}
 	
 #copyright a:hover {color: #666;}
 
+div.popUp {
+  color: blue;
+}
 
+span.popUpTop {
+  font-size: 1.3em;
+  font-weight: 500;
+  color: red;
+}

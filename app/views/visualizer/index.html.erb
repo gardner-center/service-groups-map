@@ -4,7 +4,6 @@
     <span id="basic-search">Basic program search</span><br />
 
     <%= form_tag "/visualize/find_programs", :id => "service-group-list", :method => :post do %>
-    <!--JBB<form action="#" onsubmit="drawNearbyPrograms(this.address.value); return false">JBB-->
       <p>
       Zip:<input type="text" size="10" name="zip" value="<%= @user_zipcode %>" /><br />
       Age min:<input type="text" size="2" name="age_min" value="8" />
@@ -74,6 +73,9 @@
       <%= submit_tag "Find Programs", :id => "submit-button", :class => "button" %>
     <% end %>
     <hr />
+    <input type=button name="mapFun" value="test stuff" onclick="drawPrograms(); return false">
+    <hr />
+    <hr />
     <a href="/find">Advanced find</a>
     <hr />
     <!-- Toggle Traffic Overlay -->
@@ -97,3 +99,4 @@
     <a href="http://jgc.stanford.edu">Other resources</a> availabe from the John Gardner Center at Stanford University
   </td>
 </tr></table>
+

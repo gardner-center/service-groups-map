@@ -24,7 +24,7 @@ class VisualizerController < ApplicationController
     @nearbyPrograms = [] #initialize
     session[:user_zip] = params[:zip] ||= session[:user_zip]
     @user_zipcode = session[:user_zip]
-    user_zip_like = @user_zipcode + "%" #So we find 10 digit zips with 5.
+    user_zip_like = @user_zipcode.first(5) + "%" #So we find 10 digit zips with 5.
     age_min = params[:age_min] ||= "8"
     age_min = age_min.to_i - 1
     age_max = params[:age_max] ||= "14"
