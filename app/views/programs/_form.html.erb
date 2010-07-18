@@ -6,7 +6,7 @@
       <input type=hidden name="program_id" value=<%= @program.id %>>
     <% end %>
     <select name="service_group_id" id="service_group_id" onchange="$('submit-button').click();">
-    <% for sg in ServiceGroup.all %>
+    <% for sg in ServiceGroup.order('name ASC') %>
       <option value="<%= sg.id %>"><%= sg.name %></option>
     <% end %>
     </select>
@@ -89,6 +89,14 @@
   <div class="field">
     <%= f.label :zipcode %><br />
     <%= f.text_field :zipcode %>
+  </div>
+  <div class="field">
+    <%= f.label :phone %><br />
+    <%= f.text_field :phone %>
+  </div>
+  <div class="field">
+    <%= f.label :website %><br />
+    <%= f.text_field :website %>
   </div>
   <div class="field">
     <label>Categories</label><br /> 

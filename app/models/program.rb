@@ -4,11 +4,16 @@ class Program < ActiveRecord::Base
   has_and_belongs_to_many :service_persons
   has_and_belongs_to_many :categories
   has_and_belongs_to_many :styles
-  belongs_to :zips
 
   before_save :create_formatted_address, :get_lat_lon
 
-  scope :within_miles_of_zip, lambda{|radius, zip|
+  scope :within_miles_of_zip, lambda{|radius, zip| #this is interesting, but does
+                                                   #not work in present form as
+                                                   #zip table not associated with 
+                                                   #program tables anymore. We don't
+                                                   #want zip table associated, so
+                                                   #this should be fixed another way
+
 
     area = zip.area_for(radius)
 

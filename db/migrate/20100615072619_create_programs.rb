@@ -20,6 +20,8 @@ class CreatePrograms < ActiveRecord::Migration
       t.string :city
       t.string :state
       t.string :zipcode
+      t.string :phone
+      t.string :website
       t.string :formatted_address
       t.string :lat
       t.string :lon

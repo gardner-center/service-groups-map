@@ -85,6 +85,16 @@
 </p>
 
 <p>
+  <b>Phone:</b>
+  <%= @program.phone %>
+</p>
+
+<p>
+  <b>Website:</b>
+  <%= @program.website %>
+</p>
+
+<p>
   <b>Categories:</b>
   <%= @program.categories.collect(&:name).join(', ') %>
 </p>

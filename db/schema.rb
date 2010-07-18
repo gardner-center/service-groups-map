@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(:version => 20100709004405) do
     t.string   "city"
     t.string   "state"
     t.string   "zipcode"
+    t.string   "phone"
+    t.string   "website"
     t.string   "formatted_address"
     t.string   "lat"
     t.string   "lon"
