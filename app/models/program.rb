@@ -31,6 +31,7 @@ class Program < ActiveRecord::Base
       :order => "distance"}
   }
 
+  validates_presence_of :service_group_id, :message => "must be selected"
   validates_presence_of :name
   validates_numericality_of :start_time, :less_than_or_equal_to => 24, :allow_blank => true
   validates_numericality_of :end_time, :less_than_or_equal_to => 24, :allow_blank => true #ideally would check if end date same, then make sure later than start_time

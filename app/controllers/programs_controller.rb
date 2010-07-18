@@ -63,8 +63,7 @@ class ProgramsController < ApplicationController
     #handle time inputs
     params[:program][:start_time] = format_time(params[:program][:start_time])
     params[:program][:end_time] = format_time(params[:program][:end_time])
-    params[:program][:category_ids].count < 1 ? @no_category = true : @no_category = false
-
+    params[:program][:category_ids].count > 0 ? @is_category = true : @is_category = false
     #zipcode = params[:program][:zipcode]
     #zipcode = zipcode[0,5]
     #zip_obj = Zip.code(zipcode)
@@ -82,15 +81,11 @@ class ProgramsController < ApplicationController
     load_many_to_many
 
     respond_to do |format|
-      if @program.save
-        if @no_category
-          @program.errors.add_to_base('Please assign one or more categories.')
-          format.html { render :action => "new" }
-          format.xml  { render :xml => @program.errors, :status => :unprocessable_entity }
-        end
+      if @program.save && @is_category && @is_group
         format.html { redirect_to(@program, :notice => 'Program was successfully created.') }
         format.xml  { render :xml => @program, :status => :created, :location => @program }
       else
+        @program.errors.add_to_base('Please assign one or more categories.') unless @is_category
         format.html { render :action => "new" }
         format.xml  { render :xml => @program.errors, :status => :unprocessable_entity }
       end
@@ -110,18 +105,20 @@ class ProgramsController < ApplicationController
     #handle time inputs
     params[:program][:start_time] = format_time(params[:program][:start_time])
     params[:program][:end_time] = format_time(params[:program][:end_time])
+    
+
     #update zip_id 
     #zip_obj = Zip.code(params[:program][:zipcode])
     #params[:program][:zip_id] = zip_obj.id unless zip_obj.nil?
 
     respond_to do |format|
-      if params[:program][:category_ids].count < 1
-        @program.errors.add_to_base('Please assign one or more categories.')
-        format.html { render :action => "edit" }
-      elsif @program.update_attributes(params[:program])
+      if @program.update_attributes(params[:program]) && params[:program][:category_ids].count > 0 
         format.html { redirect_to(@program, :notice => 'Program was successfully updated.') }
         format.xml  { head :ok }
       else
+        if params[:program][:category_ids].count < 1
+          @program.errors.add_to_base('Please assign one or more categories.') 
+        end
         format.html { render :action => "edit" }
         format.xml  { render :xml => @program.errors, :status => :unprocessable_entity }
       end
@@ -170,8 +167,9 @@ class ProgramsController < ApplicationController
         end
       end
     else
-      @service_group = ServiceGroup.first
-      @service_people = @service_group.service_persons
+      render :nothing => true 
+      #@service_group = ServiceGroup.first
+      #@service_people = @service_group.service_persons
     end
     #  render(:update) do |page|
     #    page[:program_address1].value = @program.address1

@@ -32,10 +32,8 @@
 
 <p>
   <b>Repeats:</b>
-  <% @repeat_options = Repeat.all %>
-  <% @repeat_options.unshift("fill 0 index spot") %>
   <% unless @program.repeats.nil? %>
-    <%= @repeat_options[@program.repeats].name %>
+    <%= REPEATS[@program.repeats].name %>
   <% end %>
 </p>
 

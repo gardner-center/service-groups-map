@@ -6,6 +6,7 @@
       <input type=hidden name="program_id" value=<%= @program.id %>>
     <% end %>
     <select name="service_group_id" id="service_group_id" onchange="$('submit-button').click();">
+      <option value="">Please select a service group</option>
     <% for sg in ServiceGroup.order('name ASC') %>
       <option value="<%= sg.id %>"><%= sg.name %></option>
     <% end %>
@@ -16,7 +17,7 @@
 
 <%= form_for(@program) do |f| %>
   <%= render "shared/error_messages", :target => @program %>
-
+  <%= f.hidden_field :service_group_id %>
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name %>
@@ -44,12 +45,11 @@
   <div class="field">
     <%= f.label :repeats %><br />
     <select id="program_repeats" name="program[repeats]">
-    <% @repeat_types = Repeat.all %>
-    <% for repeat in @repeat_types %>
-      <% if repeat.id == @program.repeats %>
-        <option value="<%= repeat.id %>" selected="selected"><%= repeat.name %></option>
+    <% for repeat in REPEATS %>
+      <% if repeat[:id] == @program.repeats %>
+        <option value="<%= repeat[:id] %>" selected="selected"><%= repeat[:name] %></option>
       <% else %>
-        <option value="<%= repeat.id %>"><%= repeat.name %></option>
+        <option value="<%= repeat[:id] %>"><%= repeat[:name] %></option>
       <% end %>
     <% end %>
     </select>  
@@ -100,16 +100,16 @@
   </div>
   <div class="field">
     <label>Categories</label><br /> 
-    <% for category in Category.find(:all) %>
-      <%= check_box_tag "program[category_ids][]", category.id, @active_categories.include?(category.id)%>
-      <%= category.name %><br />
+    <% for category in CATEGORIES %>
+      <%= check_box_tag "program[category_ids][]", category[:id], @active_categories.include?(category[:id])%>
+      <%= category[:name] %><br />
     <% end %>
   </div>
   <div class="field">
     <label>Styles</label><br /> 
-    <% for style in Style.find(:all) %>
-      <%= check_box_tag "program[style_ids][]", style.id, @active_styles.include?(style.id)%>
-      <%= style.name %><br />
+    <% for style in STYLES %>
+      <%= check_box_tag "program[style_ids][]", style[:id], @active_styles.include?(style[:id])%>
+      <%= style[:name] %><br />
     <% end %>
   </div>
   <div id="service-people">

@@ -1,6 +1,7 @@
 class CreatePrograms < ActiveRecord::Migration
   def self.up
     create_table :programs do |t|
+      t.integer :service_group_id
       t.string :name
       t.text :description
       t.date :start_date
