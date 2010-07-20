@@ -10,9 +10,9 @@ $("program_website").value = "<%= @service_group.website %>"
 $("service-people").replace("<div id=service-people><div class='field'><label>Service people</label><br /></div>")
 <% for sp in @service_people %>
   <% if @active_service_people.include?(sp.id) %>
-    $("service-people").insert("<input checked='checked' id='program_service_person_ids name='program[service_person_ids][]' type='checkbox' value='<%= sp.id %>' />")
+    $("service-people").insert("<input checked='checked' id='program_service_person_ids' name='program[service_person_ids][]' type='checkbox' value='<%= sp.id %>' />")
   <% else %>
-    $("service-people").insert("<input id='program_service_person_ids name='program[service_person_ids][]' type='checkbox' value='<%= sp.id %>' />")
+    $("service-people").insert("<input id='program_service_person_ids' name='program[service_person_ids][]' type='checkbox' value='<%= sp.id %>' />")
   <% end %> 
   $("service-people").insert({bottom: "<%= sp.first_name %> <%= sp.last_name %><br />"})
 <% end %>

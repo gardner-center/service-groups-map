@@ -4,7 +4,8 @@ class Program < ActiveRecord::Base
   has_and_belongs_to_many :service_persons
   has_and_belongs_to_many :categories
   has_and_belongs_to_many :styles
-
+ 
+  before_validation :capitalize_state
   before_save :create_formatted_address, :get_lat_lon
 
   scope :within_miles_of_zip, lambda{|radius, zip| #this is interesting, but does
@@ -39,7 +40,7 @@ class Program < ActiveRecord::Base
   validate :validate_date_combination
   validates_presence_of :address1
   validates_presence_of :city
-  validates_presence_of :state
+  validate :state, :state => true
   validates :zipcode, :length => {:minimum => 5, :maximum => 10}
   validates_associated :styles
   validates_associated :service_persons
@@ -55,7 +56,11 @@ class Program < ActiveRecord::Base
       errors.add(:end_date, "may be invalid") 
     end
   end
-      
+
+  def capitalize_state
+    self.state = self.state.upcase unless self.state.nil?
+  end
+     
 
   def within_miles(radius)
     self.class.within_miles_of_zip(radius, zip)

@@ -1,5 +1,7 @@
 class AdminController < ApplicationController
 
+  ssl_required :login, :process_login
+
   def login
 
   end

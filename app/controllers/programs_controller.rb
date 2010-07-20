@@ -36,6 +36,7 @@ class ProgramsController < ApplicationController
     @active_categories = []
     @active_styles = []
     @active_service_people = []
+    @service_people = []
 
     respond_to do |format|
       format.html # new.html.erb
@@ -47,6 +48,7 @@ class ProgramsController < ApplicationController
   def edit
     begin
       @program = Program.find(params[:id])
+      @service_people = ServicePerson.where('service_group_id = ?',@program.service_group_id)
       load_many_to_many
     rescue
       invalid_route
@@ -70,6 +72,11 @@ class ProgramsController < ApplicationController
     #params[:program][:zip_id] = zip_obj.id unless zip_obj.nil?
 
     @program = Program.new(params[:program])
+    begin
+      @service_people = ServicePerson.where('service_group_id = ?',params[:program][:service_group_id])
+    rescue
+      @service_people = []
+    end
     #zip_obj.programs.push(@program)
     #zip = Zip.code(@program.zipcode)
     #unless zip.nil?
@@ -85,7 +92,7 @@ class ProgramsController < ApplicationController
         format.html { redirect_to(@program, :notice => 'Program was successfully created.') }
         format.xml  { render :xml => @program, :status => :created, :location => @program }
       else
-        @program.errors.add_to_base('Please assign one or more categories.') unless @is_category
+        @program.errors[:base] << 'Please assign one or more categories.' unless @is_category
         format.html { render :action => "new" }
         format.xml  { render :xml => @program.errors, :status => :unprocessable_entity }
       end
@@ -97,6 +104,7 @@ class ProgramsController < ApplicationController
   def update
     params[:program][:category_ids] ||= []
     @program = Program.find(params[:id])
+    @service_people = ServicePerson.where('service_group_id = ?',@program.service_group_id)
     load_many_to_many
 
     params[:program][:cost] = "-1" if params[:program][:cost].downcase == "paid"
@@ -117,7 +125,7 @@ class ProgramsController < ApplicationController
         format.xml  { head :ok }
       else
         if params[:program][:category_ids].count < 1
-          @program.errors.add_to_base('Please assign one or more categories.') 
+          @program.errors[:base] << 'Please assign one or more categories.' 
         end
         format.html { render :action => "edit" }
         format.xml  { render :xml => @program.errors, :status => :unprocessable_entity }
@@ -156,7 +164,7 @@ class ProgramsController < ApplicationController
     #JBB should not respond to non js queries
     #respond_to :js
     @active_service_people = []
-    unless params[:service_group_id].nil?
+    unless params[:service_group_id].nil? || params[:service_group_id] == ""
       @service_group = ServiceGroup.find(params[:service_group_id]) 
       @service_people = @service_group.service_persons
       if params[:program_id] == ""

@@ -8,7 +8,11 @@
     <select name="service_group_id" id="service_group_id" onchange="$('submit-button').click();">
       <option value="">Please select a service group</option>
     <% for sg in ServiceGroup.order('name ASC') %>
-      <option value="<%= sg.id %>"><%= sg.name %></option>
+      <% if !(@program.nil?) && sg.id == @program.service_group_id %>
+        <option value="<%= sg.id %>" "selected"><%= sg.name %></option>
+      <% else %>
+        <option value="<%= sg.id %>"><%= sg.name %></option>
+      <% end %>
     <% end %>
     </select>
     <%= submit_tag "Submit Service Group", :id => "submit-button", :class => "hidden-form-button", :name => nil %>
@@ -84,7 +88,7 @@
   </div>
   <div class="field">
     <%= f.label :state %><br />
-    <%= f.text_field :state %>
+    <%= f.text_field :state, {:size => 2} %>
   </div>
   <div class="field">
     <%= f.label :zipcode %><br />
@@ -115,7 +119,7 @@
   <div id="service-people">
     <div class="field">
       <label>Service people</label><br /> 
-      <% for sp in ServicePerson.limit(5) %>
+      <% for sp in @service_people %>
         <%= check_box_tag "program[service_person_ids][]", sp.id, @active_service_people.include?(sp.id)%>
         <%= sp.first_name %> <%= sp.last_name %><br />
       <% end %>
