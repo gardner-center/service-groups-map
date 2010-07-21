@@ -1,23 +1,13 @@
 class VisualizerController < ApplicationController
 
-
-	#index should probably display an empty map 
-	#with forms to search for activities
-	#calculating nearby activities is an expensive operation, so hold out until the user makes a request
-        #JBB - caching, prefetching?
   def index
-    @user_zipcode = session[:user_zip] ||= "94305"
+    @user_zipcode = session[:user_zip] ||= "94303"
     user_zip_like = @user_zipcode + "%"
     @nearbyPrograms = Program.where('zipcode like ?',user_zip_like)
     #@service_groups = ServiceGroup.all #JBB Limit may be desirable 
     respond_to do |format|
       format.html 
     end
-  end
-
-  def new
-    zipcode = 94305
-    @nearbyPrograms = Zip.code(zipcode).programs
   end
 
   def find_programs
@@ -35,7 +25,7 @@ class VisualizerController < ApplicationController
     @cat_ids = ""
     @prog_ids = ""
     #Prepare for search by category
-    unless params[:program][:category_ids].nil?
+    unless params[:program].nil?
       for cat_id in params[:program][:category_ids]
         #set up join with program_id_category_id table
         @cat_ids += cat_id.to_i.to_s + ","
@@ -77,6 +67,10 @@ class VisualizerController < ApplicationController
 
   end
 
+  def find_programs_by_ajax
+
+  end
+
   def advanced_find
 
   end
@@ -84,16 +78,5 @@ class VisualizerController < ApplicationController
   def show_programs
 
   end
-
-	#identify nearby programs here
-  #JBB - value type coming in the form field will be a string "94305".to_i to convert to int
-	def proximitySearch
-    #zipcode = params[:input][:zipcode]
-    zipcode = params[:zip]
-    if(zipcode.length >=5)
-      @nearbyPrograms = Zip.code(zipcode).programs
-    else @nearbyPrograms = []
-    end
-	end
 
 end

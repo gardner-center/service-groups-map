@@ -1,3 +1,26 @@
+<script type="text/javascript">
+  function doUncheck(go) {
+    if (go) {
+      var form = $('service-group-list')
+      var buttons = form.getInputs('checkbox', 'program[category_ids][]')
+      
+      for (i=0; i < buttons.length; i++) {
+        buttons[i].checked = false;
+      }
+    }
+  }
+  
+  function checkTypeStatus() {
+    var wantAllTypes = document.getElementById('category_all');
+    if (wantAllTypes.checked) {
+      $('category_list').hide();
+    } else {
+      $('category_list').show();
+    }
+  }
+
+</script>
+
 <table><tr>
   <td id="left-column" class="left-column">
     <p>&nbsp;</p>
@@ -8,20 +31,19 @@
       Zip:<input type="text" size="10" name="zip" value="<%= @user_zipcode %>" /><br />
       Age min:<input type="text" size="2" name="age_min" value="8" />
       max:<input type="text" size="2" name="age_max" value="14" /><br />
-      Type: <input id="category_all" name="category_all" type="checkbox" value="1" checked="checked" onclick="$('category_list').toggle(); return true;"/>Any<br /> 
+      Type: <input id="category_all" name="category_all" type="checkbox" value="1" checked="checked" onclick="$('category_list').toggle(); doUncheck(this.checked); return true;"/>Any<br /> 
 
       <div id="category_list" style="display: none;">
-        <% for category in Category.find(:all) %>
-          <%= check_box_tag "program[category_ids][]", category.id %>
-          <%= category.name %><br />
+        <% for category in CATEGORIES %>
+          <%= check_box_tag "program[category_ids][]", category[:id] %>
+          <%= category[:name] %><br />
         <% end %>
       </div>
       Day(s) offered:
       <select id="program_repeats" name="program[repeats]">
         <option value="any" selected="selected">Any day</option>
-        <% @repeat_types = Repeat.all %>
-        <% for repeat in @repeat_types %>
-          <option value="<%= repeat.id %>"><%= repeat.name %></option>
+        <% for repeat in REPEATS %>
+          <option value="<%= repeat[:id] %>"><%= repeat[:name] %></option>
         <% end %>
       </select>  
       <br />
@@ -73,7 +95,9 @@
       <%= submit_tag "Find Programs", :id => "submit-button", :class => "button" %>
     <% end %>
     <hr />
-    <input type=button name="mapFun" value="test stuff" onclick="drawPrograms(); return false">
+    <%= form_tag "/visualize/find_programs_by_ajax", :id => "test-form", :method => :post, :remote => true do %>
+      <%= submit_tag "Find Programs by Ajax", :id => "submit-button", :class => "button" %>
+    <% end %>
     <hr />
     <hr />
     <a href="/find">Advanced find</a>
@@ -99,4 +123,4 @@
     <a href="http://jgc.stanford.edu">Other resources</a> availabe from the John Gardner Center at Stanford University
   </td>
 </tr></table>
-
+<img src="/images/blank-dot.png" onload="checkTypeStatus();">

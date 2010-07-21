@@ -15,9 +15,6 @@ class ApplicationController < ActionController::Base
 
 
 
-
-
-
   private
 
   def authorize_admin(pwd = "badpwd")
