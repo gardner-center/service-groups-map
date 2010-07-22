@@ -1,3 +1,6 @@
+HOME_ZIP = "94303"
+HOME_LAT = 37.455641
+HOME_LON = -122.131902
 REPEATS = Repeat.all
 CATEGORIES = Category.all
 STYLES = Style.all

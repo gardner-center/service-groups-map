@@ -25,7 +25,7 @@
   <td id="left-column" class="left-column">
     <p>&nbsp;</p>
     <span id="basic-search">Basic program search</span><br />
-
+    
     <%= form_tag "/visualize/find_programs", :id => "service-group-list", :method => :post do %>
       <p>
       Zip:<input type="text" size="10" name="zip" value="<%= @user_zipcode %>" /><br />
@@ -99,6 +99,9 @@
       <%= submit_tag "Find Programs by Ajax", :id => "submit-button", :class => "button" %>
     <% end %>
     <hr />
+    <%= form_tag "/visualize/find_programs_by_ajax", :id => "test-form-non-ajax", :method => :post do %>
+      <%= submit_tag "Find Programs not by Ajax", :id => "submit-button", :class => "button" %>
+    <% end %>
     <hr />
     <a href="/find">Advanced find</a>
     <hr />

@@ -13,6 +13,33 @@ class ApplicationController < ActionController::Base
     redirect_to('/visualize', :notice => "Sorry, your request was not recognized")
   end
 
+  def establish_session 
+    begin
+      if session[:user_zip].empty? || (session[:expires_at] < Time.now.utc)
+        if session[:user_zip].empty?
+          session[:user_zip] = HOME_ZIP
+          session[:lat] = HOME_LAT
+          session[:lon] = HOME_LON
+        end
+        session[:expires_at] = Time.now.utc + 3.months
+      end
+    rescue
+      if session[:user_zip].empty?
+        session[:user_zip] = HOME_ZIP
+        session[:lat] = HOME_LAT
+        session[:lon] = HOME_LON
+      end
+      session[:expires_at] = Time.now.utc + 3.months
+    end
+    if session[:lat].nil? 
+      zip = Zip.find_by_code(session[:user_zip])
+      session[:lat] = zip.lat
+      session[:lon] = zip.lon
+    end
+    @user_lat = session[:lat]
+    @user_lon = session[:lon]
+    @change_zip_problem = false
+  end
 
 
   private

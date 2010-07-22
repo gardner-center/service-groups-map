@@ -7,10 +7,6 @@
   <%= csrf_meta_tag %>
 
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-  <!--get user location-->
-  <% @loc = Zip.find_by_code(@user_zipcode) %>
-  <% @loc = Zip.find_by_code(94303) unless @loc %>
-  <!--end user locale-->
 
   <script type="text/javascript">
 
@@ -23,7 +19,7 @@
 
     function initialize() {
       directionsDisplay = new google.maps.DirectionsRenderer();
-      var location_to_show = new google.maps.LatLng(<%= @loc.lat %>, -<%= @loc.lon %>);
+      var location_to_show = new google.maps.LatLng(<%= @user_lat %>, -<%= @user_lon %>);
       var myOptions = {
         zoom:13,
         mapTypeId: google.maps.MapTypeId.ROADMAP,

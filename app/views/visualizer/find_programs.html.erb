@@ -1,4 +1,6 @@
 Number of programs found in area:<%= @nearbyPrograms.count %>
-
+<% if @change_zip_problem == true %>
+  The zip code you entered was not recognized, so the zip code being used for your search remains <%= @user_zipcode %>.
+<% end %>
 <div id="map_canvas" style="width: 100%; height: 400px"></div>
 <div id="directionsPanel" style="width: 100%; height:100%;"></div>

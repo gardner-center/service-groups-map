@@ -1,3 +1,19 @@
-$("basic-search").insert ({top: "Something is cooking now.Can insert top, bottom, before or after"})
-$("directionsPanel").insert ({bottom: "next up, dynamically populate the map"})
+<% if @change_zip_problem == true %>
+  var errorMsg = "The zip code you entered was not recognized, so the zip code being used in your search remains" + "<%= @user_zipcode %><br />"
+  $("basic-search").insert ({top: errorMsg})
+<% end %>
 
+
+<% unless @nearbyPrograms.nil? %>
+  //if zipcode the same no need to redraw map.  Can we check for this?
+  //if using same map, need to clear markers then draw new ones
+  //if new map then draw new map, then add back markers, change zip code being displayed
+  <% for program in @nearbyPrograms %>
+    showOnMap(<%= program.lat %>, <%= program.lon %>,"<%= program.name %>");
+  <% end %>
+
+<% end %>
+
+
+
+$("directionsPanel").insert ({bottom: "next up, dynamically populate this area"})
