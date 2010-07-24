@@ -13,9 +13,9 @@
     var directionDisplay;
     var directionsService = new google.maps.DirectionsService();
     var map;
-    var geocoder = null;
-    var trafficInfo = null;
-    var trafficStatus = 1;
+    var markersArray = [];
+    var infoWindowArray = [];
+
 
     function initialize() {
       directionsDisplay = new google.maps.DirectionsRenderer();
@@ -28,12 +28,23 @@
       map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
       directionsDisplay.setMap(map);
       directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+    }
 
-
-
-        geocoder = new google.maps.Geocoder();
-        trafficInfo = new google.maps.TrafficLayer();
-        trafficInfo.setMap(map);
+    function drawNewMap(lat,lon) {
+      //remove old map
+      document.getElementById("map_canvas").replace("<div id='map_canvas' style='width: 100%; height: 400px'></div>");
+      document.getElementById("directionsPanel").replace("<div id='directionsPanel' style='width: 100%; height:100%;'></div>");
+      //build new one
+      directionsDisplay = new google.maps.DirectionsRenderer();
+      var location_to_show = new google.maps.LatLng(lat,lon);
+      var myOptions = {
+        zoom:13,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: location_to_show
+      }
+      map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+      directionsDisplay.setMap(map);
+      directionsDisplay.setPanel(document.getElementById("directionsPanel"));
     }
 
     function showOnMap(lat,lon,name)
@@ -44,18 +55,19 @@
         map: map,
         title: name
       });
+      markersArray.push(marker);
       
       var contentString = "<div class='popUp'><span class='popUpTop'>" + name + "</span><br />" + "Determine desired details to go here</div>";
       var infowindow = new google.maps.InfoWindow({
         content: contentString
       });
+      infoWindowArray.push(infowindow);
 
       google.maps.event.addListener(marker, 'click', function() {
         //map.setZoom(8);
         infowindow.open(map,marker);
       });
     }
-
 
     function drawPrograms()
     {
@@ -66,32 +78,17 @@
       <% end %>
     }
 
-
-    function toggleTraffic() {
-      if (trafficStatus == 1) {
-        trafficInfo.setMap(null);
-        trafficStatus = 0;
-      } else {
-        trafficInfo.setMap(map);
-        trafficStatus = 1;
+    function deleteOverlays()
+    {
+      if (infoWindowArray) {
+        infoWindowArray.length = 0;
       }
-    }
-
-
-  
-    function calcRoute(fromAddress, toAddress) {
-      var start = "San Francisco";
-      var end = "Los Angeles";
-      var request = {
-          origin:fromAddress, 
-          destination:toAddress,
-          travelMode: google.maps.DirectionsTravelMode.DRIVING
-      };
-      directionsService.route(request, function(response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-          directionsDisplay.setDirections(response);
+      if (markersArray) {
+        for (var i=0;i < markersArray.length; i++) {
+          markersArray[i].setMap(null);
         }
-      });
+        markersArray.length = 0;
+      }
     }
 
     </script>

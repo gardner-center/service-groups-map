@@ -14,7 +14,6 @@ class VisualizerController < ApplicationController
   def find_programs
     @nearbyPrograms = [] #initialize
     if !(params[:zip].empty?) && (session[:user_zip] != params[:zip])
-      @need_new_map = true
       change_of_zip(params[:zip])
     end
     @user_zipcode = session[:user_zip]
@@ -69,6 +68,11 @@ class VisualizerController < ApplicationController
       @nearbyPrograms = Program.where("#{@pre_sql}",user_zip_like,age_min,age_max)
     end
 
+    respond_to do |format|
+      format.html 
+      format.js
+    end
+  
   end
 
   def find_programs_by_ajax
@@ -97,9 +101,11 @@ class VisualizerController < ApplicationController
   def change_of_zip(new_zip)
     begin
       zip = Zip.find_by_code(new_zip.first(5))
+      @need_new_map = true
       session[:user_zip] = zip.code
-      session[:lat] = zip.lat
-      session[:lon] = zip.lon
+      @user_lat = session[:lat] = zip.lat
+      @user_lon = session[:lon] = zip.lon
+      @change_zip_problem = false
     rescue
       @change_zip_problem = true #zip code not recognized
     end

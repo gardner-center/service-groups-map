@@ -26,7 +26,7 @@
     <p>&nbsp;</p>
     <span id="basic-search">Basic program search</span><br />
     
-    <%= form_tag "/visualize/find_programs", :id => "service-group-list", :method => :post do %>
+    <%= form_tag "/visualize/find_programs", :id => "service-group-list", :method => :post, :remote => true do %>
       <p>
       Zip:<input type="text" size="10" name="zip" value="<%= @user_zipcode %>" /><br />
       Age min:<input type="text" size="2" name="age_min" value="8" />
@@ -95,27 +95,11 @@
       <%= submit_tag "Find Programs", :id => "submit-button", :class => "button" %>
     <% end %>
     <hr />
-    <%= form_tag "/visualize/find_programs_by_ajax", :id => "test-form", :method => :post, :remote => true do %>
-      <%= submit_tag "Find Programs by Ajax", :id => "submit-button", :class => "button" %>
-    <% end %>
-    <hr />
-    <%= form_tag "/visualize/find_programs_by_ajax", :id => "test-form-non-ajax", :method => :post do %>
-      <%= submit_tag "Find Programs not by Ajax", :id => "submit-button", :class => "button" %>
-    <% end %>
+      <input type="button" value="Clear markers", id="clear-button", class="button", onclick="deleteOverlays();"/>
     <hr />
     <a href="/find">Advanced find</a>
     <hr />
-    <!-- Toggle Traffic Overlay -->
-    <input type="button" value="Toggle Traffic" onClick="toggleTraffic();"/>
 
-    <!-- Directions form -->
-    <form action="#" onsubmit="calcRoute(this.from.value, this.to.value); return false">
-       From: <input type="text" size="20" id="fromAddress" name="from"
-         value="San Francisco"/><br />
-       To: <input type="text" size="20" id="toAddress" name="to"
-         value="Mountain View" /><br />
-        <input name="submit" type="submit" value="Get Directions!" />
-    </form>
   </td>
   <td id="middle-column" class="middle-column">
     <div id="map_canvas" style="width: 100%; height: 400px"></div>

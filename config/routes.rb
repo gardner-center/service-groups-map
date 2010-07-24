@@ -1,5 +1,6 @@
 JgcMapping::Application.routes.draw do |map|
 
+  match '/programs/associate' => 'programs#associate'
 
   resources :categories
 
@@ -13,7 +14,6 @@ JgcMapping::Application.routes.draw do |map|
 
   resources :service_groups
 
-  match '/programs/associate' => 'programs#associate'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
