@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20100709004405) do
   end
 
   create_table "programs", :force => true do |t|
+    t.integer  "service_group_id"
     t.string   "name"
     t.text     "description"
     t.date     "start_date"
