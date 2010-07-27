@@ -43,8 +43,8 @@ ActiveRecord::Schema.define(:version => 20100709004405) do
     t.string   "phone"
     t.string   "website"
     t.string   "formatted_address"
-    t.string   "lat"
-    t.string   "lon"
+    t.decimal  "lat",        :precision => 15, :scale => 10
+    t.decimal  "lon",        :precision => 15, :scale => 10
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "zip_id"
