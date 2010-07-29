@@ -3,3 +3,6 @@ Before launching rails, you will need to create and seed your database the first
 This requires commenting lines 4,5,6 of config/initilaizers/std_vars.rb or else the migration will fail
 After commenting out above, type 'rake db:migrate' and then 'rake db:seed' to set up DB
 You will likely also want to load the zip code/lat/lon table of the database with rake:load_zip_lat_lons
+
+Google Maps v2 API key is: "ABQIAAAAilVv1qxG55GSzI107tbYyBSA9w0yAHuUrQE4aB_1cQIe--scTxRNAxlkT1LeJP8U6-JbTgN9GaoLNQ"
+Google Maps v3 ("v=3" in your query string) does not require a key

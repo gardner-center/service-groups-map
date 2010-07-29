@@ -29,11 +29,15 @@ class VisualizerController < ApplicationController
     end
     @user_zipcode = session[:user_zip]
     user_zip_like = session[:user_just_zip].first(2) + "%" #So we find 10 digit zips with 5.
-    age_min = params[:age_min] ||= "8"
-    age_min = age_min.to_i - 1
-    age_max = params[:age_max] ||= "14"
-    age_max = age_max.to_i + 1
-    @pre_sql = "zipcode like ? AND age_min > ? AND age_max < ?"
+    if params[:age_any] #not posted if unchecked
+      @pre_sql = "zipcode like ?"
+    else
+      age_min = params[:age_min] ||= "8"
+      age_min = age_min.to_i - 1
+      age_max = params[:age_max] ||= "14"
+      age_max = age_max.to_i + 1
+      @pre_sql = "zipcode like ? AND age_min > ? AND age_max < ?"
+    end
     @post_sql = ""
 
     @cat_ids = ""
@@ -74,9 +78,17 @@ class VisualizerController < ApplicationController
 
     #@nearbyPrograms = Program.where("#{@pre_sql}",@post_sql)
     if @cat_ids.length > 1
-      @nearbyPrograms = Program.where("#{@pre_sql}",user_zip_like,age_min,age_max,@post_sql)
+      if @pre_sql =~ /age/
+        @nearbyPrograms = Program.where("#{@pre_sql}",user_zip_like,age_min,age_max,@post_sql)
+      else
+        @nearbyPrograms = Program.where("#{@pre_sql}",user_zip_like,@post_sql)
+      end
     else
-      @nearbyPrograms = Program.where("#{@pre_sql}",user_zip_like,age_min,age_max)
+      if @pre_sql =~ /age/
+        @nearbyPrograms = Program.where("#{@pre_sql}",user_zip_like,age_min,age_max)
+      else
+        @nearbyPrograms = Program.where("#{@pre_sql}",user_zip_like)
+      end
     end
     cull_based_on_proximity #See if within radius and delete if not
 
@@ -85,19 +97,6 @@ class VisualizerController < ApplicationController
       format.js
     end
   
-  end
-
-  def find_programs_by_ajax
-
-    #JBB the following are placeholder functions just to validate things are working
-    @nearbyPrograms = Program.where('zipcode = ?',"94306")
-    @change_zip_problem = true
-    @user_zipcode = "JBB"
-
-    respond_to do |format|
-      format.html 
-      format.js
-    end
   end
 
   def find_lat_lon

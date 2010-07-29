@@ -10,12 +10,18 @@
     }
   }
   
-  function checkTypeStatus() {
+  function checkTypeAndAgeStatus() {
     var wantAllTypes = document.getElementById('category_all');
     if (wantAllTypes.checked) {
       $('category_list').hide();
     } else {
       $('category_list').show();
+    }
+    var wantAllAges = document.getElementById('age_any');
+    if (wantAllAges.checked) {
+      $('age_detail').hide();
+    } else {
+      $('age_detail').show();
     }
   }
 
@@ -27,14 +33,18 @@
 
 <table><tr>
   <td id="left-column" class="left-column">
-    <p>&nbsp;</p>
-    <span id="basic-search">Basic program search</span><br />
+    <span id="basic-search">Find a program</span><br />
     
     <%= form_tag "/visualize/find_programs", :id => "service-group-list", :method => :post, :remote => true do %>
       <p>
-      Zip:<input type="text" size="10" name="zip" id="zip" value="<%= @user_zipcode %>" onBlur="mirrorAddress(this.value); $('geo-submit-button').click();" /><br />
-      Age min:<input type="text" size="2" name="age_min" value="8" />
-      max:<input type="text" size="2" name="age_max" value="14" /><br />
+      Zip or address:<br />
+      <input type="text" size="15" name="zip" id="zip" value="<%= @user_zipcode %>" onBlur="mirrorAddress(this.value); $('geo-submit-button').click();" /><br />
+      Ages: <input id="age_any" name="age_any" type="checkbox" value="1" checked="checked" onclick="$('age_detail').toggle(); return true;"/>Any<br /> 
+      <div id="age_detail" style="display: none;">
+        Age min:<input type="text" size="2" name="age_min" value="8" /><br />
+        Age max:<input type="text" size="2" name="age_max" value="14" />
+      </div>
+
       Type: <input id="category_all" name="category_all" type="checkbox" value="1" checked="checked" onclick="$('category_list').toggle(); doUncheck(this.checked); return true;"/>Any<br /> 
 
       <div id="category_list" style="display: none;">
@@ -118,4 +128,4 @@
     <a href="http://jgc.stanford.edu">Other resources</a> availabe from the John Gardner Center at Stanford University
   </td>
 </tr></table>
-<img src="/images/blank-dot.png" onload="checkTypeStatus();">
+<img src="/images/blank-dot.png" onload="checkTypeAndAgeStatus();">
