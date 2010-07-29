@@ -17,27 +17,30 @@ class ApplicationController < ActionController::Base
     begin
       if session[:user_zip].empty? || (session[:expires_at] < Time.now.utc)
         if session[:user_zip].empty?
-          session[:user_zip] = HOME_ZIP
+          session[:user_zip] = session[:user_just_zip] = HOME_ZIP
           session[:lat] = HOME_LAT
           session[:lon] = HOME_LON
+          session[:radius] = DEFAULT_RADIUS
         end
         session[:expires_at] = Time.now.utc + 3.months
       end
     rescue
       if session[:user_zip].empty?
-        session[:user_zip] = HOME_ZIP
+        session[:user_zip] = session[:user_just_zip] = HOME_ZIP
         session[:lat] = HOME_LAT
         session[:lon] = HOME_LON
+        session[:radius] = DEFAULT_RADIUS
       end
       session[:expires_at] = Time.now.utc + 3.months
     end
     if session[:lat].nil? 
-      zip = Zip.find_by_code(session[:user_zip])
+      zip = Zip.find_by_code(session[:user_just_zip])
       session[:lat] = zip.lat
       session[:lon] = zip.lon
     end
     @user_lat = session[:lat]
     @user_lon = session[:lon]
+    @user_radius = session[:radius] ||= DEFAULT_RADIUS
     @change_zip_problem = false
   end
 

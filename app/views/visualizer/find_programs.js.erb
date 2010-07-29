@@ -6,8 +6,10 @@
 deleteOverlays();
 <% if @need_new_map %>
 //change zip code display at top
+  var newCenterAddress = "<span id='center_point'> <%= @user_zipcode %></span>";
+  $("center_point").replace(newCenterAddress)
 //draw new map
-  drawNewMap(<%= @user_lat %>,-<%= @user_lon %>);
+  drawNewMap(<%= @user_lat %>,<%= @user_lon %>);
 <% end %>
 
 

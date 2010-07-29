@@ -19,7 +19,7 @@
 
     function initialize() {
       directionsDisplay = new google.maps.DirectionsRenderer();
-      var location_to_show = new google.maps.LatLng(<%= @user_lat %>, -<%= @user_lon %>);
+      var location_to_show = new google.maps.LatLng(<%= @user_lat %>, <%= @user_lon %>);
       var myOptions = {
         zoom:13,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -99,7 +99,7 @@
 
 <div id="nav">
   <ul>
-    <li id="home">Youth programs in zip code: <%= @user_zipcode %></li>
+    <li id="home">Youth programs near: <span id="center_point"><%= @user_zipcode %></span></li>
   </ul>
 </div>	
 

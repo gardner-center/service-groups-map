@@ -24,8 +24,8 @@ class CreatePrograms < ActiveRecord::Migration
       t.string :phone
       t.string :website
       t.string :formatted_address
-      t.decimal  "lat",        :precision => 15, :scale => 10
-      t.decimal  "lon",        :precision => 15, :scale => 10
+      t.decimal :lat, :precision => 15, :scale => 10
+      t.decimal :lon, :precision => 15, :scale => 10
 
       t.timestamps
     end

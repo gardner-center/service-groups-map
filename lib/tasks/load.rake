@@ -8,29 +8,6 @@ namespace :load do
     puts "== %s %s" % [message, "=" * length]
   end
 
-  desc "Loads zip codes from #{ZIP_CODE_DATA_URL}"
-  task :zip_codes => :environment do
-    begin
-      time = Benchmark.measure do      
-				require 'open-uri'
-				zips = open(ZIP_CODE_DATA_URL).read
-				lines = zips.split("\n")				
-				for line in lines
-					info = line.split(",")
-				  zip = Zip.create!(
-            :code => info[1][1,info[1].size-2],
-            :state => info[2][1,info[2].size-2],
-            :city => info[3][1,info[3].size-2],
-            :lon => info[4],
-            :lat => info[5])
-        end
-      end
-      announce "Loaded %5d zip codes in (%2dm %2.0fs)" % [Zip.count, *time.real.divmod(60)]
-    rescue LoadError
-      puts "This rake task requires fastercsv.  To install, run this command:\n\n  sudo gem install fastercsv\n\n"
-    end
-  end
-
   desc "Loads lat and lon for zip codes from 'db/zips.txt'"
   task :zip_lat_lons => :environment do
     begin
@@ -41,18 +18,18 @@ namespace :load do
       ActiveRecord::Base.connection.execute(sql_begin_transaction)
       announce "Initiated transaction at #{Time.now}\n"
       File.open('db/zips.txt').each do |line|
-        sql = "INSERT into zips (code,city,state,lat,lon) VALUES "
+        sql = "INSERT into zips (code,city,state,lon,lat) VALUES "
         info = line.split(",")
         sql += "('" + info[1][1,info[1].size-2] + "',"
         sql += "'" + info[2][1,info[2].size-2] + "',"
         sql += "'" + info[3][1,info[3].size-2] + "',"
-        sql += info[4] + ","
+        sql += "-" + info[4] + "," #file doesn't have negative lon value as it should, so adding it
         sql += info[5] + ");"
         ActiveRecord::Base.connection.execute(sql)
         sql = ""
         count += 1
         p "#{count} lines processed\n" if count%100 == 0
-        if count == 3000
+        if count%3000 == 0
           announce "Commit insert of 3000 rows in process...\n"
           ActiveRecord::Base.connection.execute(sql_commit_transaction)
           announce "Bulk insert complete, resume building bulk sql statement\n"

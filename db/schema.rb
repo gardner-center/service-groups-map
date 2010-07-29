@@ -26,14 +26,14 @@ ActiveRecord::Schema.define(:version => 20100709004405) do
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.decimal  "start_time",         :precision => 4, :scale => 2
-    t.decimal  "end_time",           :precision => 4, :scale => 2
+    t.decimal  "start_time",         :precision => 4,  :scale => 2
+    t.decimal  "end_time",           :precision => 4,  :scale => 2
     t.integer  "start_day_of_week"
     t.integer  "repeats"
     t.date     "range"
     t.integer  "age_min"
     t.integer  "age_max"
-    t.decimal  "cost",               :precision => 6, :scale => 2
+    t.decimal  "cost",               :precision => 6,  :scale => 2
     t.integer  "rating_numerator"
     t.integer  "rating_denominator"
     t.string   "address1"
@@ -44,11 +44,10 @@ ActiveRecord::Schema.define(:version => 20100709004405) do
     t.string   "phone"
     t.string   "website"
     t.string   "formatted_address"
-    t.decimal  "lat",        :precision => 15, :scale => 10
-    t.decimal  "lon",        :precision => 15, :scale => 10
+    t.decimal  "lat",                :precision => 15, :scale => 10
+    t.decimal  "lon",                :precision => 15, :scale => 10
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "zip_id"
   end
 
   add_index "programs", ["zipcode"], :name => "index_programs_on_zipcode"

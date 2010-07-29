@@ -19,6 +19,10 @@
     }
   }
 
+  function mirrorAddress(val) {
+    $('zip_mirror').value = val;
+  }
+
 </script>
 
 <table><tr>
@@ -28,7 +32,7 @@
     
     <%= form_tag "/visualize/find_programs", :id => "service-group-list", :method => :post, :remote => true do %>
       <p>
-      Zip:<input type="text" size="10" name="zip" value="<%= @user_zipcode %>" /><br />
+      Zip:<input type="text" size="10" name="zip" id="zip" value="<%= @user_zipcode %>" onBlur="mirrorAddress(this.value); $('geo-submit-button').click();" /><br />
       Age min:<input type="text" size="2" name="age_min" value="8" />
       max:<input type="text" size="2" name="age_max" value="14" /><br />
       Type: <input id="category_all" name="category_all" type="checkbox" value="1" checked="checked" onclick="$('category_list').toggle(); doUncheck(this.checked); return true;"/>Any<br /> 
@@ -96,6 +100,10 @@
     <% end %>
     <hr />
       <input type="button" value="Clear markers", id="clear-button", class="button", onclick="deleteOverlays();"/>
+      <%= form_tag "/visualize/find_lat_lon", :id => "service-group-geo", :method => :post, :remote => true do %>
+        <input type="hidden" name="zip_mirror" id="zip_mirror">
+        <%= submit_tag "Geocode Address", :id => "geo-submit-button", :class => "button", :style => "display: none;" %>
+      <% end %>
     <hr />
     <a href="/find">Advanced find</a>
     <hr />
