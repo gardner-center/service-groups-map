@@ -2,7 +2,11 @@ class VisualizerController < ApplicationController
 
   #------------------------------------------------------------------
   #Note that session[:user_zip] is being used to house full addresses
-  #session[:user_just_zip] stores only the 5 digit zip code
+  #session[:user_just_zip] stores only the 5 digit zip code if 
+  #available.
+  #Current db query assumes lat/lon values in the session and uses a 
+  #delta to build an initial list of nearby programs which is then
+  #culled based on the search radius specified
   #------------------------------------------------------------------
 
   before_filter :establish_session
@@ -10,9 +14,13 @@ class VisualizerController < ApplicationController
   include Distance
   
   def index
-    @user_zipcode = session[:user_just_zip]
-    user_zip_like = @user_zipcode.first(2) + "%"
-    @nearbyPrograms = Program.where('zipcode like ?',user_zip_like)
+    @user_zipcode = session[:user_zip]
+    #user_zip_like = @user_zipcode.first(2) + "%"
+    #@nearbyPrograms = Program.where('zipcode like ?',user_zip_like)
+    @nearbyPrograms = Program.where("lat > (#{session[:lat]} - #{LATLON_DELTA}) AND 
+                                     lat < (#{session[:lat]} + #{LATLON_DELTA}) AND 
+                                     lon > (#{session[:lon]} - #{LATLON_DELTA}) AND 
+                                     lon < (#{session[:lon]} + #{LATLON_DELTA})")
     cull_based_on_proximity #See if within radius and delete if not
 
     respond_to do |format|
@@ -28,15 +36,17 @@ class VisualizerController < ApplicationController
       change_of_zip(params[:zip])
     end
     @user_zipcode = session[:user_zip]
-    user_zip_like = session[:user_just_zip].first(2) + "%" #So we find 10 digit zips with 5.
-    if params[:age_any] #not posted if unchecked
-      @pre_sql = "zipcode like ?"
-    else
+    #user_zip_like = session[:user_just_zip].first(2) + "%" #So we find 10 digit zips with 5.
+    @pre_sql = "lat > (#{session[:lat]} - #{LATLON_DELTA}) AND 
+                lat < (#{session[:lat]} + #{LATLON_DELTA}) AND 
+                lon > (#{session[:lon]} - #{LATLON_DELTA}) AND 
+                lon < (#{session[:lon]} + #{LATLON_DELTA})"
+    unless params[:age_any] 
       age_min = params[:age_min] ||= "8"
       age_min = age_min.to_i - 1
       age_max = params[:age_max] ||= "14"
       age_max = age_max.to_i + 1
-      @pre_sql = "zipcode like ? AND age_min > ? AND age_max < ?"
+      @pre_sql += " AND age_min > ? AND age_max < ?"
     end
     @post_sql = ""
 
@@ -79,15 +89,15 @@ class VisualizerController < ApplicationController
     #@nearbyPrograms = Program.where("#{@pre_sql}",@post_sql)
     if @cat_ids.length > 1
       if @pre_sql =~ /age/
-        @nearbyPrograms = Program.where("#{@pre_sql}",user_zip_like,age_min,age_max,@post_sql)
+        @nearbyPrograms = Program.where("#{@pre_sql}",age_min,age_max,@post_sql)
       else
-        @nearbyPrograms = Program.where("#{@pre_sql}",user_zip_like,@post_sql)
+        @nearbyPrograms = Program.where("#{@pre_sql}",@post_sql)
       end
     else
       if @pre_sql =~ /age/
-        @nearbyPrograms = Program.where("#{@pre_sql}",user_zip_like,age_min,age_max)
+        @nearbyPrograms = Program.where("#{@pre_sql}",age_min,age_max)
       else
-        @nearbyPrograms = Program.where("#{@pre_sql}",user_zip_like)
+        @nearbyPrograms = Program.where("#{@pre_sql}")
       end
     end
     cull_based_on_proximity #See if within radius and delete if not
@@ -120,7 +130,9 @@ class VisualizerController < ApplicationController
               geocoordinates = get_lat_lon(address)
               unless geocoordinates.empty?
                 session[:user_zip_staged] = address
-                session[:user_just_zip_staged] = address[/\d{5}(-\d{4})?(.{2,20})?$/].first(5)
+                if address[/(\d{5})(-\d{4})?(.{2,20})?$/]
+                  session[:user_just_zip_staged] = $1
+                end
                 session[:lat_staged] = geocoordinates[:lat]
                 session[:lon_staged] = geocoordinates[:lon]
               end
@@ -167,7 +179,9 @@ class VisualizerController < ApplicationController
         geocoordinates = get_lat_lon(new_zip)
         unless geocoordinates.empty?
           session[:user_zip] = new_zip
-          session[:user_just_zip] = new_zip[/\d{5}(-\d{4})?(.{2,20})?$/].first(5)
+          if new_zip[/(\d{5})(-\d{4})?(.{2,20})?$/]
+            session[:user_just_zip] = $1
+          end
           @user_lat = session[:lat] = geocoordinates[:lat]
           @user_lon = session[:lon] = geocoordinates[:lon]
         else

@@ -8,6 +8,7 @@ module Distance
   def distance(lat1,lon1,lat2,lon2,unit)
     theta = lon1 - lon2
     dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta))
+    dist = 0.999999999 if dist >= 1 #account for exact address match and rounding complication
 
     dist = Math.acos(dist)
     dist = rad2deg(dist)

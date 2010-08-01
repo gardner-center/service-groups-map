@@ -18,7 +18,10 @@ deleteOverlays();
   //if using same map, need to clear markers then draw new ones
   //if new map then draw new map, then add back markers, change zip code being displayed
   <% for program in @nearbyPrograms %>
-    showOnMap(<%= program.lat %>, <%= program.lon %>,"<%= program.name %>");
+    <% details = "#{program.formatted_address}" 
+    detailsPhone = "#{program.phone}" 
+    detailsURL = "#{program.website}" %>
+    showOnMap(<%= program.lat %>, <%= program.lon %>,"<%= program.name %>","<%= details %>","<%= detailsPhone %>","<%= detailsURL %>");
   <% end %>
 
 <% end %>

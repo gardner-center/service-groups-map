@@ -47,7 +47,7 @@
       directionsDisplay.setPanel(document.getElementById("directionsPanel"));
     }
 
-    function showOnMap(lat,lon,name)
+    function showOnMap(lat,lon,name,details,detailsPhone,detailsURL)
     {
       var program_location = new google.maps.LatLng(lat,lon);
       var marker = new google.maps.Marker({
@@ -57,7 +57,8 @@
       });
       markersArray.push(marker);
       
-      var contentString = "<div class='popUp'><span class='popUpTop'>" + name + "</span><br />" + "Determine desired details to go here</div>";
+      var contentString = "<div class='popUp'><span class='popUpTop'>" + name + "</span><br />" + details + "<br />" + 
+                           detailsPhone + "<br />" + detailsURL + "</div>";
       var infowindow = new google.maps.InfoWindow({
         content: contentString
       });
@@ -73,7 +74,10 @@
     {
       <% unless @nearbyPrograms.nil? %>
         <% for program in @nearbyPrograms %>
-          showOnMap(<%= program.lat %>, <%= program.lon %>,"<%= program.name %>");
+          <% details = "#{program.formatted_address}" 
+           detailsPhone = "#{program.phone}" 
+           detailsURL = "#{program.website}" %>
+          showOnMap(<%= program.lat %>, <%= program.lon %>,"<%= program.name %>","<%= details %>","<%= detailsPhone %>","<%= detailsURL %>");
         <% end %>
       <% end %>
     }
