@@ -60,12 +60,16 @@
       var contentString = "<div class='popUp'><span class='popUpTop'>" + name + "</span><br />" + details + "<br />" + 
                            detailsPhone + "<br />" + detailsURL + "</div>";
       var infowindow = new google.maps.InfoWindow({
-        content: contentString
+        content: contentString,
+        maxWidth: 350
       });
       infoWindowArray.push(infowindow);
 
       google.maps.event.addListener(marker, 'click', function() {
         //map.setZoom(8);
+        for (var i=0;i < infoWindowArray.length; i++) {
+          infoWindowArray[i].close(map.marker);
+        }
         infowindow.open(map,marker);
       });
     }
