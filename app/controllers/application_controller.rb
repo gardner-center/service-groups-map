@@ -13,34 +13,30 @@ class ApplicationController < ActionController::Base
     redirect_to('/visualize', :notice => "Sorry, your request was not recognized")
   end
 
-  def establish_session 
+  def establish_cookie
+    #Can customize expiry time and bundle values into one cookie with code below 
+    #cookies[:jbb1] = { :value => {:one => "hi", :two => "hello"},
+    #                   :expires => Time.now.utc + 3.months
+    #                 }
+    #cookies[:jbb1][:one] = "hi 2"
+    
+
     begin
-      if session[:user_zip].empty? || (session[:expires_at] < Time.now.utc)
-        if session[:user_zip].empty?
-          session[:user_zip] = session[:user_just_zip] = HOME_ZIP
-          session[:lat] = HOME_LAT
-          session[:lon] = HOME_LON
-          session[:radius] = DEFAULT_RADIUS
-        end
-        session[:expires_at] = Time.now.utc + 3.months
+      if cookies[:user_zip].length < 3 || cookies[:lon].length < 3
+        cookies.permanent[:user_zip] = cookies[:user_just_zip] = HOME_ZIP
+        cookies.permanent[:lat] = HOME_LAT
+        cookies.permanent[:lon] = HOME_LON
+        cookies.permanent[:radius] = DEFAULT_RADIUS
       end
-    rescue
-      if session[:user_zip].empty?
-        session[:user_zip] = session[:user_just_zip] = HOME_ZIP
-        session[:lat] = HOME_LAT
-        session[:lon] = HOME_LON
-        session[:radius] = DEFAULT_RADIUS
-      end
-      session[:expires_at] = Time.now.utc + 3.months
+    rescue #if no cookie, we will land here when trying to access a nil object in begin area
+      cookies.permanent[:user_zip] = cookies[:user_just_zip] = HOME_ZIP
+      cookies.permanent[:lat] = HOME_LAT
+      cookies.permanent[:lon] = HOME_LON
+      cookies.permanent[:radius] = DEFAULT_RADIUS
     end
-    if session[:lat].nil? 
-      zip = Zip.find_by_code(session[:user_just_zip])
-      session[:lat] = zip.lat
-      session[:lon] = zip.lon
-    end
-    @user_lat = session[:lat]
-    @user_lon = session[:lon]
-    @user_radius = session[:radius] ||= DEFAULT_RADIUS
+    @user_lat = cookies[:lat].to_f
+    @user_lon = cookies[:lon].to_f
+    @user_radius = cookies[:radius].to_i ||= DEFAULT_RADIUS
     @change_zip_problem = false
   end
 

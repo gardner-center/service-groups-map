@@ -6,6 +6,10 @@ module Distance
 #------------------------------------------------
 
   def distance(lat1,lon1,lat2,lon2,unit)
+    #lat1 = lat1.to_f
+    #lon1 = lon1.to_f
+    #lat2 = lat2.to_f
+    #lon2 = lon2.to_f
     theta = lon1 - lon2
     dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta))
     dist = 0.999999999 if dist >= 1 #account for exact address match and rounding complication

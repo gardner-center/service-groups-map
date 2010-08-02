@@ -1,26 +1,27 @@
 class VisualizerController < ApplicationController
 
   #------------------------------------------------------------------
-  #Note that session[:user_zip] is being used to house full addresses
-  #session[:user_just_zip] stores only the 5 digit zip code if 
+  #Note that cookie[:user_zip] is being used to house full addresses
+  #cookie[:user_just_zip] stores only the 5 digit zip code if 
   #available.
-  #Current db query assumes lat/lon values in the session and uses a 
+  #Current db query assumes lat/lon values in the cookie and uses a 
   #delta to build an initial list of nearby programs which is then
   #culled based on the search radius specified
   #------------------------------------------------------------------
 
-  before_filter :establish_session
+  before_filter :establish_cookie
 
   include Distance
   
   def index
-    @user_zipcode = session[:user_zip]
+    @user_zipcode = cookies[:user_zip]
     #user_zip_like = @user_zipcode.first(2) + "%"
     #@nearbyPrograms = Program.where('zipcode like ?',user_zip_like)
-    @nearbyPrograms = Program.where("lat > (#{session[:lat]} - #{LATLON_DELTA}) AND 
-                                     lat < (#{session[:lat]} + #{LATLON_DELTA}) AND 
-                                     lon > (#{session[:lon]} - #{LATLON_DELTA}) AND 
-                                     lon < (#{session[:lon]} + #{LATLON_DELTA})")
+    @nearbyPrograms = Program.where("lat > (? - #{LATLON_DELTA}) AND 
+                                     lat < (? + #{LATLON_DELTA}) AND 
+                                     lon > (? - #{LATLON_DELTA}) AND 
+                                     lon < (? + #{LATLON_DELTA})",
+                                     @user_lat,@user_lat,@user_lon,@user_lon)
     cull_based_on_proximity #See if within radius and delete if not
 
     respond_to do |format|
@@ -32,15 +33,14 @@ class VisualizerController < ApplicationController
     @nearbyPrograms = [] #initialize
     @need_new_map = false #initialize
 
-    if !(params[:zip].empty?) && (session[:user_zip] != params[:zip])
+    if !(params[:zip].empty?) && (cookies[:user_zip] != params[:zip])
       change_of_zip(params[:zip])
     end
-    @user_zipcode = session[:user_zip]
-    #user_zip_like = session[:user_just_zip].first(2) + "%" #So we find 10 digit zips with 5.
-    @pre_sql = "lat > (#{session[:lat]} - #{LATLON_DELTA}) AND 
-                lat < (#{session[:lat]} + #{LATLON_DELTA}) AND 
-                lon > (#{session[:lon]} - #{LATLON_DELTA}) AND 
-                lon < (#{session[:lon]} + #{LATLON_DELTA})"
+    @user_zipcode = cookies[:user_zip]
+    @pre_sql = "lat > (? - #{LATLON_DELTA}) AND 
+                lat < (? + #{LATLON_DELTA}) AND 
+                lon > (? - #{LATLON_DELTA}) AND 
+                lon < (? + #{LATLON_DELTA})"
     unless params[:age_any] 
       age_min = params[:age_min] ||= "8"
       age_min = age_min.to_i - 1
@@ -89,15 +89,15 @@ class VisualizerController < ApplicationController
     #@nearbyPrograms = Program.where("#{@pre_sql}",@post_sql)
     if @cat_ids.length > 1
       if @pre_sql =~ /age/
-        @nearbyPrograms = Program.where("#{@pre_sql}",age_min,age_max,@post_sql)
+        @nearbyPrograms = Program.where("#{@pre_sql}",@user_lat,@user_lat,@user_lon,@user_lon,age_min,age_max,@post_sql)
       else
-        @nearbyPrograms = Program.where("#{@pre_sql}",@post_sql)
+        @nearbyPrograms = Program.where("#{@pre_sql}",@user_lat,@user_lat,@user_lon,@user_lon,@post_sql)
       end
     else
       if @pre_sql =~ /age/
-        @nearbyPrograms = Program.where("#{@pre_sql}",age_min,age_max)
+        @nearbyPrograms = Program.where("#{@pre_sql}",@user_lat,@user_lat,@user_lon,@user_lon,age_min,age_max)
       else
-        @nearbyPrograms = Program.where("#{@pre_sql}")
+        @nearbyPrograms = Program.where("#{@pre_sql}",@user_lat,@user_lat,@user_lon,@user_lon)
       end
     end
     cull_based_on_proximity #See if within radius and delete if not
@@ -111,13 +111,13 @@ class VisualizerController < ApplicationController
 
   def find_lat_lon
     #pull address from address in form
-    #get lat/lon and add to session
+    #get lat/lon and add to cookies
     respond_to do |format|
       format.js do
         begin
           address = params[:zip_mirror] #JBB some potential for a lag problem where mirror value 
                                         #not created fast enough, so get old value
-          if address != session[:user_zip]
+          if address != cookies[:user_zip]
             if (address.length <= 10) && (address.first(5).to_i > 0)
               #assume zip only
               zip = Zip.find_by_code(address.first(5))
@@ -160,10 +160,10 @@ class VisualizerController < ApplicationController
     begin
       if session[:lat_staged]
         #the preprocessing of the zip/address field has happened and we can use that data
-        session[:user_zip] = session[:user_zip_staged]
-        session[:user_just_zip] = session[:user_just_zip_staged]
-        @user_lat = session[:lat] = session[:lat_staged]
-        @user_lon = session[:lon] = session[:lon_staged]
+        cookies[:user_zip] = session[:user_zip_staged]
+        cookies[:user_just_zip] = session[:user_just_zip_staged]
+        @user_lat = cookies[:lat] = session[:lat_staged]
+        @user_lon = cookies[:lon] = session[:lon_staged]
         session.delete(:user_zip_staged) #if session[:user_zip_staged]
         session.delete(:lat_staged) #if session[:lat_staged]
         session.delete(:lon_staged) #if session[:lon_staged]
@@ -171,19 +171,19 @@ class VisualizerController < ApplicationController
       elsif (new_zip.length <= 10) && (new_zip.first(5).to_i > 0)
         #no preprocessing,so we will do geocoding.  This is for zip code only entry  
         zip = Zip.find_by_code(new_zip.first(5))
-        session[:user_zip] = session[:user_just_zip] = zip.code
-        @user_lat = session[:lat] = zip.lat
-        @user_lon = session[:lon] = zip.lon
+        cookies[:user_zip] = cookies[:user_just_zip] = zip.code
+        @user_lat = cookies[:lat] = zip.lat
+        @user_lon = cookies[:lon] = zip.lon
       else
         #Assume full address
         geocoordinates = get_lat_lon(new_zip)
         unless geocoordinates.empty?
-          session[:user_zip] = new_zip
+          cookies[:user_zip] = new_zip
           if new_zip[/(\d{5})(-\d{4})?(.{2,20})?$/]
-            session[:user_just_zip] = $1
+            cookies[:user_just_zip] = $1
           end
-          @user_lat = session[:lat] = geocoordinates[:lat]
-          @user_lon = session[:lon] = geocoordinates[:lon]
+          @user_lat = cookies[:lat] = geocoordinates[:lat]
+          @user_lon = cookies[:lon] = geocoordinates[:lon]
         else
           raise
         end
@@ -199,8 +199,8 @@ class VisualizerController < ApplicationController
     if @nearbyPrograms
       index = 0
       for program in @nearbyPrograms
-        dist = distance(session[:lat],session[:lon],program.lat,program.lon,"M")
-        if dist > session[:radius]
+        dist = distance(@user_lat,@user_lon,program.lat,program.lon,"M")
+        if dist > @user_radius
           @nearbyPrograms.delete_at(index)
           index -= 1
         end
