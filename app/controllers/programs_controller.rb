@@ -21,7 +21,7 @@ class ProgramsController < ApplicationController
       load_many_to_many
 
       respond_to do |format|
-        format.html # show.html.erb
+        format.html 
         format.xml  { render :xml => @program }
       end
     rescue
@@ -66,6 +66,7 @@ class ProgramsController < ApplicationController
     params[:program][:start_time] = format_time(params[:program][:start_time])
     params[:program][:end_time] = format_time(params[:program][:end_time])
     params[:program][:category_ids].count > 0 ? @is_category = true : @is_category = false
+    params[:program][:service_group_id].to_i > 0 ? @is_group = true : @is_group = false
     #zipcode = params[:program][:zipcode]
     #zipcode = zipcode[0,5]
     #zip_obj = Zip.code(zipcode)
