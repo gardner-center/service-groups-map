@@ -30,6 +30,7 @@ class VisualizerController < ApplicationController
   end
 
   def find_programs
+    @notes = ""  #Use this to help people if they do things like specify a min_age > max_age
     @nearbyPrograms = [] #initialize
     @need_new_map = false #initialize
 
@@ -46,7 +47,11 @@ class VisualizerController < ApplicationController
       age_min = age_min.to_i - 1
       age_max = params[:age_max] ||= "14"
       age_max = age_max.to_i + 1
-      @pre_sql += " AND age_min > ? AND age_max < ?"
+      if age_max >= age_min
+        @pre_sql += " AND age_min > ? AND age_max < ?"
+      else
+        @notes += "Age criteria was not used because a minimum age greater than or equal to a maximum age would yied no results."
+      end
     end
     @post_sql = ""
 
@@ -59,7 +64,8 @@ class VisualizerController < ApplicationController
         @cat_ids += cat_id.to_i.to_s + ","
       end
       @cat_ids.gsub!(/,$/,"") #remove trailing ","
-      #get eligible programs serving those categories
+      #get eligible programs serving those categories. JBB: This searches over all programs now. 
+      #Would be more efficient to search within local area
       @progs_with_cats = Program.find_by_sql("select distinct program_id from categories_programs where category_id IN (#{@cat_ids})")
       for prog in @progs_with_cats
         @prog_ids += prog.program_id.to_s + ","
@@ -67,39 +73,42 @@ class VisualizerController < ApplicationController
       @prog_ids.gsub!(/,$/,"") #remove trailing ","
       @pre_sql += " AND id IN (#{@prog_ids})"
     end
+    #Repeats criteria
     unless params[:program][:repeats] == "any"
       @pre_sql += " AND repeats = ?"
       @post_sql = "#{params[:program][:repeats]}"
     end
-    unless params[:start_time] == "any"
+    #Time criteria
+    unless params[:start_time] == "any" && params[:end_time] == "any"
       begin
         #discard unless end_time after start time
         if params[:start_time].to_i < params[:end_time].to_i
           st = params[:start_time].to_i - 2
+          @pre_sql += " AND start_time > #{st}" unless st < 0
           et =  params[:end_time].to_i + 2
-          st.to_s
-          et.to_s
-          @pre_sql += " AND start_time > #{st} AND end_time < #{et}"
+          @pre_sql += " AND end_time < #{et}" unless et < 0
+        else
+          @notes += " The time criteria was not used because it is not valid to have the end time fall before the start time."
         end
       rescue
         #proceed
       end
     end
-
     #@nearbyPrograms = Program.where("#{@pre_sql}",@post_sql)
-    if @cat_ids.length > 1
-      if @pre_sql =~ /age/
+    if @pre_sql =~ /age/
+      if @post_sql.empty?
+        @nearbyPrograms = Program.where("#{@pre_sql}",@user_lat,@user_lat,@user_lon,@user_lon,age_min,age_max)
+      else
         @nearbyPrograms = Program.where("#{@pre_sql}",@user_lat,@user_lat,@user_lon,@user_lon,age_min,age_max,@post_sql)
+      end
+    else
+      if @post_sql.empty?
+        @nearbyPrograms = Program.where("#{@pre_sql}",@user_lat,@user_lat,@user_lon,@user_lon)
       else
         @nearbyPrograms = Program.where("#{@pre_sql}",@user_lat,@user_lat,@user_lon,@user_lon,@post_sql)
       end
-    else
-      if @pre_sql =~ /age/
-        @nearbyPrograms = Program.where("#{@pre_sql}",@user_lat,@user_lat,@user_lon,@user_lon,age_min,age_max)
-      else
-        @nearbyPrograms = Program.where("#{@pre_sql}",@user_lat,@user_lat,@user_lon,@user_lon)
-      end
     end
+
     cull_based_on_proximity #See if within radius and delete if not
 
     respond_to do |format|

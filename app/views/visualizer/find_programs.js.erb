@@ -1,7 +1,3 @@
-<% if @change_zip_problem == true %>
-  var errorMsg = "The zip code you entered was not recognized, so the zip code being used in your search remains" + "<%= @user_zipcode %><br />"
-  $("basic-search").insert ({top: errorMsg})
-<% end %>
 
 deleteOverlays();
 <% if @need_new_map %>
@@ -27,5 +23,16 @@ deleteOverlays();
 <% end %>
 
 
+<% if @change_zip_problem == true %>
+  var errorMsg = "The address you entered was not recognized, so the address being used in your search remains" + "<%= @user_zipcode %><br />"
+  $("directionNotes").insert ({top: errorMsg})
+  $("directionNotes").highlight({duration: 10})
+  $("directionNotes").fade({duration: 15.0})
+<% end %>
 
-$("directionsPanel").insert ({bottom: "next up, dynamically populate this area"})
+<% if !(@notes.empty?) %>
+  //$("directionNotes").show()
+  $("directionNotes").insert ({top: "<%= @notes %>"})
+  $("directionNotes").highlight({duration: 10})
+  $("directionNotes").fade({duration: 15.0})
+<% end %>

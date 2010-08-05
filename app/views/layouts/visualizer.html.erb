@@ -33,7 +33,7 @@
     function drawNewMap(lat,lon) {
       //remove old map
       document.getElementById("map_canvas").replace("<div id='map_canvas' style='width: 100%; height: 400px'></div>");
-      document.getElementById("directionsPanel").replace("<div id='directionsPanel' style='width: 100%; height:100%;'></div>");
+      document.getElementById("directionsPanel").replace("<div id='directionsPanel' style='width: 100%; height:100%;'><span id='directionNotes'></span></div>");
       //build new one
       directionsDisplay = new google.maps.DirectionsRenderer();
       var location_to_show = new google.maps.LatLng(lat,lon);
