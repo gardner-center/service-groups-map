@@ -29,6 +29,7 @@
     $('zip_mirror').value = val;
   }
 
+
 </script>
 
 <%= @jbb %>
@@ -39,7 +40,7 @@
     
     <%= form_tag "/visualize/find_programs", :id => "service-group-list", :method => :post, :remote => true do %>
       <p>
-      Zip or address:<br />
+      Enter a zip or address:<br />
       <input type="text" size="15" name="zip" id="zip" value="<%= @user_zipcode %>" onBlur="mirrorAddress(this.value); $('geo-submit-button').click();" /><br />
       Ages: <input id="age_any" name="age_any" type="checkbox" value="1" checked="checked" onclick="$('age_detail').toggle(); return true;"/>Any<br /> 
       <div id="age_detail" style="display: none;">
@@ -111,7 +112,7 @@
       <%= submit_tag "Find Programs", :id => "submit-button", :class => "button" %>
     <% end %>
     <hr />
-      <input type="button" value="Clear markers", id="clear-button", class="button", onclick="deleteOverlays();"/>
+      <input type="button" value="Bicycle Paths", id="bicycling-button", class="button", onclick="toggleBicycleRoutes();"/>
       <%= form_tag "/visualize/find_lat_lon", :id => "service-group-geo", :method => :post, :remote => true do %>
         <input type="hidden" name="zip_mirror" id="zip_mirror">
         <%= submit_tag "Geocode Address", :id => "geo-submit-button", :class => "button", :style => "display: none;" %>
@@ -122,7 +123,7 @@
 
   </td>
   <td id="middle-column" class="middle-column">
-    <div id="map_canvas" style="width: 100%; height: 400px"></div>
+    <div id="map_canvas" style="width: 100%; height: 500px"></div>
     <div id="directionsPanel" style="width: 100%; height:100%;">
        <span id="directionNotes"></span> 
     </div>

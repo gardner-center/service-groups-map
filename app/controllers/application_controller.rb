@@ -20,23 +20,25 @@ class ApplicationController < ActionController::Base
     #                 }
     #cookies[:jbb1][:one] = "hi 2"
     
-
     begin
       if cookies[:user_zip].length < 3 || cookies[:lon].length < 3
         cookies.permanent[:user_zip] = cookies[:user_just_zip] = HOME_ZIP
         cookies.permanent[:lat] = HOME_LAT
         cookies.permanent[:lon] = HOME_LON
         cookies.permanent[:radius] = DEFAULT_RADIUS
+        cookies.permanent[:show_instructions] = "true"
       end
     rescue #if no cookie, we will land here when trying to access a nil object in begin area
       cookies.permanent[:user_zip] = cookies[:user_just_zip] = HOME_ZIP
       cookies.permanent[:lat] = HOME_LAT
       cookies.permanent[:lon] = HOME_LON
       cookies.permanent[:radius] = DEFAULT_RADIUS
+      cookies.permanent[:show_instructions] = "true"
     end
     @user_lat = cookies[:lat].to_f
     @user_lon = cookies[:lon].to_f
     @user_radius = cookies[:radius].to_i ||= DEFAULT_RADIUS
+    @show_instructions = cookies[:show_instructions] ||= "true"
     @change_zip_problem = false
   end
 

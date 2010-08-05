@@ -15,6 +15,7 @@
     var map;
     var markersArray = [];
     var infoWindowArray = [];
+    var bikeLayer = 1;
 
 
     function initialize() {
@@ -32,7 +33,7 @@
 
     function drawNewMap(lat,lon) {
       //remove old map
-      document.getElementById("map_canvas").replace("<div id='map_canvas' style='width: 100%; height: 400px'></div>");
+      document.getElementById("map_canvas").replace("<div id='map_canvas' style='width: 100%; height: 500px'></div>");
       document.getElementById("directionsPanel").replace("<div id='directionsPanel' style='width: 100%; height:100%;'><span id='directionNotes'></span></div>");
       //build new one
       directionsDisplay = new google.maps.DirectionsRenderer();
@@ -99,11 +100,35 @@
       }
     }
 
+    function toggleBicycleRoutes()
+    {
+      //Assumes map object already exists
+      if (bikeLayer == 1) {
+        bikeLayer = new google.maps.BicyclingLayer();
+        bikeLayer.setMap(map);
+      } else {
+        bikeLayer.setMap(null);
+        bikeLayer = 1
+      }
+    }
+
     </script>
 
 
 </head>
 <body onload="initialize(); drawPrograms()">
+<% if @show_instructions == "true" %>
+  <div id="instructions">
+    <h3>Welcome.</h3>  
+    <ul>
+      <li>This application is for helping you find youth development programs near you. </li> 
+      <li>When you press the "Find Programs" button, you will see programs displayed on the map.</li>
+      <li>You can simply enter an address or zip code and press the "Find Programs" button or you may specify any additional criteria such as ages and the type of program (sports, faith baised, etc.) before you press the "Find Programs" button.</li>
+      <li>You can change your criteria and press the "Find Programs" button as many times as you wish.</li>
+    </ul>
+    <%= link_to 'Do not show this message again', 'visualize/decline_instructions', :remote => true %>
+  </div>
+<% end %>
 
 <div id="nav">
   <ul>

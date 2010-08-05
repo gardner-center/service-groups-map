@@ -50,3 +50,9 @@ span.popUpTop {
   font-weight: 500;
   color: red;
 }
+
+span#basic-search {
+  font-size: 1.3em;
+  font-weight: 500;
+  color: black;
+}

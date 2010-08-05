@@ -155,6 +155,14 @@ class VisualizerController < ApplicationController
     end
   end
 
+  def decline_instructions
+    cookies.permanent[:show_instructions] = false
+    render(:update) do |page|
+      page[:instructions].hide
+    end 
+
+  end
+
   def advanced_find
 
   end
