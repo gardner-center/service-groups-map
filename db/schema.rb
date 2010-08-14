@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100709004405) do
+ActiveRecord::Schema.define(:version => 20100815042606) do
 
   create_table "categories", :force => true do |t|
     t.string "name"
@@ -26,14 +26,14 @@ ActiveRecord::Schema.define(:version => 20100709004405) do
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.decimal  "start_time",         :precision => 4,  :scale => 2
-    t.decimal  "end_time",           :precision => 4,  :scale => 2
+    t.decimal  "start_time",           :precision => 4,  :scale => 2
+    t.decimal  "end_time",             :precision => 4,  :scale => 2
     t.integer  "start_day_of_week"
     t.integer  "repeats"
     t.date     "range"
     t.integer  "age_min"
     t.integer  "age_max"
-    t.decimal  "cost",               :precision => 6,  :scale => 2
+    t.decimal  "cost",                 :precision => 6,  :scale => 2
     t.integer  "rating_numerator"
     t.integer  "rating_denominator"
     t.string   "address1"
@@ -43,13 +43,19 @@ ActiveRecord::Schema.define(:version => 20100709004405) do
     t.string   "zipcode"
     t.string   "phone"
     t.string   "website"
+    t.string   "formatted_categories"
+    t.string   "formatted_styles"
+    t.string   "formatted_repeats"
+    t.string   "formatted_hours"
     t.string   "formatted_address"
-    t.decimal  "lat",                :precision => 15, :scale => 10
-    t.decimal  "lon",                :precision => 15, :scale => 10
+    t.decimal  "lat",                  :precision => 15, :scale => 10
+    t.decimal  "lon",                  :precision => 15, :scale => 10
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "programs", ["lat"], :name => "index_programs_on_lat"
+  add_index "programs", ["lon"], :name => "index_programs_on_lon"
   add_index "programs", ["zipcode"], :name => "index_programs_on_zipcode"
 
   create_table "programs_service_people", :id => false, :force => true do |t|
@@ -65,6 +71,19 @@ ActiveRecord::Schema.define(:version => 20100709004405) do
   create_table "repeats", :force => true do |t|
     t.string "name"
   end
+
+  create_table "served_areas", :force => true do |t|
+    t.integer  "program_id"
+    t.string   "formatted_address"
+    t.decimal  "lat",               :precision => 15, :scale => 10
+    t.decimal  "lon",               :precision => 15, :scale => 10
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "served_areas", ["lat"], :name => "index_served_areas_on_lat"
+  add_index "served_areas", ["lon"], :name => "index_served_areas_on_lon"
+  add_index "served_areas", ["program_id"], :name => "index_served_areas_on_program_id"
 
   create_table "service_groups", :force => true do |t|
     t.string   "name"

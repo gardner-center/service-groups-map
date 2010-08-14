@@ -4,9 +4,10 @@ class Program < ActiveRecord::Base
   has_and_belongs_to_many :service_persons
   has_and_belongs_to_many :categories
   has_and_belongs_to_many :styles
+  has_many :served_areas
  
   before_validation :capitalize_state
-  before_save :create_formatted_address, :get_lat_lon
+  before_save :create_formatted_address, :get_lat_lon, :create_formatted_characteristics
 
   scope :within_miles_of_zip, lambda{|radius, zip| #this is interesting, but does
                                                    #not work in present form as
@@ -76,6 +77,24 @@ class Program < ActiveRecord::Base
     self.formatted_address += self.city + ", " + self.state + ", " + self.zipcode + ", USA"
   end
 
+  def create_formatted_characteristics
+    #self.formatted_repeats = REPEATS[self.repeats][:name]
+    #self.categories.each_with_index do |cat,index|
+      #self.formatted_categories += cat.name
+      #self.formatted_categories += ", " unless index == self.categories.length - 1
+    #end
+    #self.styles.each_with_index do |style,index|
+      #self.formatted_styles += style.name
+      #self.formatted_styles += ", " unless index == self.styles.length - 1
+    #end
+    unless self.start_time.nil? || self.end_time.nil?
+      unless self.start_time > self.end_time
+        #self.formatted_hours = self.start_time.to_s.gsub(".",":")
+        #self.formatted_hours += " - "
+        #self.formatted_hours += self.end_time.to_s.gsub(".",":")
+      end
+    end
+  end
 
   ###This method is called anytime a program is created or updated and it uses the google maps API
   ###to insert lat and lon values into the program db record

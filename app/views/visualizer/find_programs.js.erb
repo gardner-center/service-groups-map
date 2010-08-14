@@ -10,16 +10,19 @@ deleteOverlays();
 
 
 <% unless @nearbyPrograms.nil? %>
-  //if zipcode the same no need to redraw map.  Can we check for this?
-  //if using same map, need to clear markers then draw new ones
-  //if new map then draw new map, then add back markers, change zip code being displayed
-  <% for program in @nearbyPrograms %>
+  //Draw on map and populate panel underneath map
+  <% @nearbyPrograms.each_with_index do |program,index| %>
     <% details = "#{program.formatted_address}" 
     detailsPhone = "#{program.phone}" 
     detailsURL = "#{program.website}" %>
-    showOnMap(<%= program.lat %>, <%= program.lon %>,"<%= program.name %>","<%= details %>","<%= detailsPhone %>","<%= detailsURL %>");
+    showOnMap(<%= program.lat %>, <%= program.lon %>,"<%= program.name %>","<%= details %>","<%= detailsPhone %>","<%= detailsURL %>",<%= index %>);
+    
+    listView(<%= index %>); 
+    var lineItem = "<div id='listRow' class='<%= cycle('odd','even') %>' onmouseout=\"infoWindowArray[<%= index %>].close(map,markersArray[<%= index %>]);\"" + 
+                   "<img src=\"images/red_Marker" + alphabetArray[<%= index %>] + ".png\" onmouseover=\"infoWindowArray[<%= index %>].open(map,markersArray[<%= index %>]);\"" + 
+                   "<span id='listBold'><%= program.name %> </span>" + "jbb" + "</div>" 
+    $("listPane").insert(lineItem)
   <% end %>
-
 <% end %>
 
 

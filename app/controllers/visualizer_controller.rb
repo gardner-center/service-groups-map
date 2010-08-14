@@ -214,14 +214,23 @@ class VisualizerController < ApplicationController
 
   def cull_based_on_proximity
     if @nearbyPrograms
+      order_by_dist_asc = {}
       index = 0
       for program in @nearbyPrograms
         dist = distance(@user_lat,@user_lon,program.lat,program.lon,"M")
         if dist > @user_radius
           @nearbyPrograms.delete_at(index)
           index -= 1
+        else
+          #add to hash for sorting by distance
+          order_by_dist_asc[dist] = program
         end
         index += 1
+      end
+      #Rebuilt array from hash according to distance, ASC
+      @nearbyPrograms = []
+      order_by_dist_asc.keys.sort.each do |key|
+        @nearbyPrograms.push(order_by_dist_asc[key])
       end
     end
   end

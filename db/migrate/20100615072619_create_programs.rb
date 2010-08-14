@@ -23,6 +23,10 @@ class CreatePrograms < ActiveRecord::Migration
       t.string :zipcode
       t.string :phone
       t.string :website
+      t.string :formatted_categories
+      t.string :formatted_styles
+      t.string :formatted_repeats
+      t.string :formatted_hours
       t.string :formatted_address
       t.decimal :lat, :precision => 15, :scale => 10
       t.decimal :lon, :precision => 15, :scale => 10
