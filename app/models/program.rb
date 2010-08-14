@@ -78,20 +78,25 @@ class Program < ActiveRecord::Base
   end
 
   def create_formatted_characteristics
-    #self.formatted_repeats = REPEATS[self.repeats][:name]
-    #self.categories.each_with_index do |cat,index|
-      #self.formatted_categories += cat.name
-      #self.formatted_categories += ", " unless index == self.categories.length - 1
-    #end
-    #self.styles.each_with_index do |style,index|
-      #self.formatted_styles += style.name
-      #self.formatted_styles += ", " unless index == self.styles.length - 1
-    #end
+    self.formatted_repeats = REPEATS[self.repeats][:name]
+    self.formatted_categories = ""
+    self.categories.each_with_index do |category,index|
+      self.formatted_categories += category.name
+      self.formatted_categories += ", " unless index == self.categories.length - 1
+    end
+    self.formatted_styles = ""
+    self.styles.each_with_index do |style,index|
+      self.formatted_styles += style.name
+      self.formatted_styles += ", " unless index == self.styles.length - 1
+    end
     unless self.start_time.nil? || self.end_time.nil?
+      #need to pad zeros or get 16:0
       unless self.start_time > self.end_time
-        #self.formatted_hours = self.start_time.to_s.gsub(".",":")
-        #self.formatted_hours += " - "
-        #self.formatted_hours += self.end_time.to_s.gsub(".",":")
+        self.formatted_hours = self.start_time.to_s.gsub(".",":")
+        self.formatted_hours += "0" if self.formatted_hours =~ /0$/
+        self.formatted_hours += " - "
+        self.formatted_hours += self.end_time.to_s.gsub(".",":")
+        self.formatted_hours += "0" if self.formatted_hours =~ /0$/
       end
     end
   end
