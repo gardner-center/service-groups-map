@@ -14,7 +14,13 @@ pre {
 
 a { color: #000; }
 a:visited { color: #666; }
-a:hover { color: #fff; background-color:#000; }
+a:hover { color: #fff; background-color:#E7D19A; }
+
+a.listPane {
+  color: #990000;
+  font-weight: bold;
+  text-decoration: none;
+}
 
 div.field, div.actions {
   margin-bottom: 10px;
