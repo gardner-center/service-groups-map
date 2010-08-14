@@ -17,11 +17,7 @@ deleteOverlays();
     detailsURL = "#{program.website}" %>
     showOnMap(<%= program.lat %>, <%= program.lon %>,"<%= program.name %>","<%= details %>","<%= detailsPhone %>","<%= detailsURL %>",<%= index %>);
     
-    listView(<%= index %>); 
-    var lineItem = "<div id='listRow' class='<%= cycle('odd','even') %>' onmouseout=\"infoWindowArray[<%= index %>].close(map,markersArray[<%= index %>]);\"" + 
-                   "<img src=\"images/red_Marker" + alphabetArray[<%= index %>] + ".png\" onmouseover=\"infoWindowArray[<%= index %>].open(map,markersArray[<%= index %>]);\"" + 
-                   "<span id='listBold'><%= program.name %> </span>" + "jbb" + "</div>" 
-    $("listPane").insert(lineItem)
+    listView(<%= index %>,"<%= program.name %>","<%= program.age_min %>","<%= program.age_max %>","<%= program.formatted_categories %>","<%= program.formatted_repeats %>","<%= program.formatted_hours %>"); 
   <% end %>
 <% end %>
 

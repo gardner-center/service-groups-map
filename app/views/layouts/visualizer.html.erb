@@ -90,10 +90,23 @@
       <% end %>
     }
 
-    function listView(index)//,name,ages,categories,repeats,times)
+    function listView(index,name,ageMin,ageMax,categories,repeats,times)
     {
+      if (index == 0) {
+        var head_html = "<table width='100%'><tr class='even'><th width='5%'>Label</th><th width='30%'>Name</th><th width='10%'>Ages</th><th width='25%'>Type(s)</th>"
+        head_html += "<th width='15%'>Schedule</th><th width='15%'>Hours</th></tr></table>"
+        $("listPane").insert(head_html)
+      }
       var style = ['odd','even'];
-      var html = "<table><tr class='" + style[index % 2] + "'><td>JBB here</td></tr></table>";
+      var lineItem = "<a href='#' class='listPane' onmouseover=\"infoWindowArray[" + index + "]."
+      lineItem += "open(map,markersArray[" + index + "]);" 
+      lineItem += "\"" + ">" + alphabetArray[index] + "</a>"
+      
+      var html = "<table width='100%'><tr class='" + style[index % 2] + "'>"
+      html += "<td width='5%' onmouseout=\"infoWindowArray[" + index + "].close(map,markersArray[" + index + "]);\">" + lineItem + "</td>";
+      html += "<td width='30%'>" + name + "</td><td width='10%'>" + ageMin + " - " + ageMax + "</td>";
+      html += "<td width='25%'>" + categories + "</td><td width='15'>" + repeats + "</td><td width='15%'>" + times + "</td>"
+      html += "</tr></table>";
       $("listPane").insert(html)
     }
 

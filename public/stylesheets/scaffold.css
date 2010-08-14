@@ -74,6 +74,12 @@ td {
   line-height: 18px;
   text-align: center;
 }
+th {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   15px;
+  line-height: 20px;
+  text-align: center;
+}
 td.left-column {
   width: 200px;
   vertical-align: top;
