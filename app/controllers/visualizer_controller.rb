@@ -15,9 +15,14 @@ class VisualizerController < ApplicationController
   
   def index
     @user_zipcode = cookies[:user_zip]
-    #user_zip_like = @user_zipcode.first(2) + "%"
-    #@nearbyPrograms = Program.where('zipcode like ?',user_zip_like)
     @nearbyPrograms = Program.where("lat > (? - #{LATLON_DELTA}) AND 
+                                     lat < (? + #{LATLON_DELTA}) AND 
+                                     lon > (? - #{LATLON_DELTA}) AND 
+                                     lon < (? + #{LATLON_DELTA})",
+                                     @user_lat,@user_lat,@user_lon,@user_lon)
+#JBB can take these ids and add OR IN (2,3,4 - whatever is in additional_area_ids) to sql above
+    additional_area_ids = ServedArea.select('program_id').where("
+                                     lat > (? - #{LATLON_DELTA}) AND 
                                      lat < (? + #{LATLON_DELTA}) AND 
                                      lon > (? - #{LATLON_DELTA}) AND 
                                      lon < (? + #{LATLON_DELTA})",

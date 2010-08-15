@@ -18,6 +18,7 @@ class ProgramsController < ApplicationController
   def show
     begin
       @program = Program.find(params[:id])
+      format_additional_areas_served
       load_many_to_many
 
       respond_to do |format|
@@ -37,6 +38,7 @@ class ProgramsController < ApplicationController
     @active_styles = []
     @active_service_people = []
     @service_people = []
+    @more_served_areas = ""
 
     respond_to do |format|
       format.html # new.html.erb
@@ -49,6 +51,7 @@ class ProgramsController < ApplicationController
     begin
       @program = Program.find(params[:id])
       @service_people = ServicePerson.where('service_group_id = ?',@program.service_group_id)
+      format_additional_areas_served
       load_many_to_many
     rescue
       invalid_route
@@ -90,6 +93,7 @@ class ProgramsController < ApplicationController
 
     respond_to do |format|
       if @program.save && @is_category && @is_group
+        handle_additional_areas_served
         format.html { redirect_to(@program, :notice => 'Program was successfully created.') }
         format.xml  { render :xml => @program, :status => :created, :location => @program }
       else
@@ -106,6 +110,7 @@ class ProgramsController < ApplicationController
     params[:program][:category_ids] ||= []
     @program = Program.find(params[:id])
     @service_people = ServicePerson.where('service_group_id = ?',@program.service_group_id)
+    @more_served_areas = ""
     load_many_to_many
 
     params[:program][:cost] = "-1" if params[:program][:cost].downcase == "paid"
@@ -115,13 +120,10 @@ class ProgramsController < ApplicationController
     params[:program][:start_time] = format_time(params[:program][:start_time])
     params[:program][:end_time] = format_time(params[:program][:end_time])
     
-
-    #update zip_id 
-    #zip_obj = Zip.code(params[:program][:zipcode])
-    #params[:program][:zip_id] = zip_obj.id unless zip_obj.nil?
+    handle_additional_areas_served
 
     respond_to do |format|
-      if @program.update_attributes(params[:program]) && params[:program][:category_ids].count > 0 
+      if @program.update_attributes(params[:program]) && params[:program][:category_ids].count > 0
         format.html { redirect_to(@program, :notice => 'Program was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -159,6 +161,37 @@ class ProgramsController < ApplicationController
     @program.service_persons.each do |sp|
       @active_service_people << sp.id
     end
+  end
+
+  def handle_additional_areas_served
+    begin
+      if params[:additional_zips] != params[:additional_zip_original] #remove old, add new
+        #If program.update_attributes fails, these additional zips will have made it into the DB anyway
+        #delete prior additionals
+        result = ServedArea.delete_all(["program_id = ?",@program.id])
+        params[:additional_zips].gsub(/\s/,"").split(",").each do |zip|
+          if zip != @program.zipcode #no sense in storing it here if program already in that zip
+            new_area = ServedArea.new
+            new_area.program_id = params[:id]
+            new_area.formatted_address = zip.first(5)
+            new_area.save
+            @more_served_areas += zip.first(5) + ","
+          end
+        end
+       @more_served_areas.gsub!(/,$/,"") 
+      end
+    rescue
+      @more_served_areas = ""
+    end
+  end
+
+  def format_additional_areas_served
+    additional_served_areas = ServedArea.where('program_id = ?',@program.id)
+    @more_served_areas = ""
+    for area in additional_served_areas
+      @more_served_areas += area.formatted_address + ","
+    end
+    @more_served_areas.gsub!(/,$/,"")
   end
 
   def associate

@@ -94,6 +94,13 @@
     <%= f.label :zipcode %><br />
     <%= f.text_field :zipcode %>
   </div>
+
+  <div class="field">
+    <label>Additional zip codes served (separate with a ",". E.g., "94303, 94310")</label><br /> 
+    <%= text_field_tag "additional_zips",  @more_served_areas %>
+  </div>
+  <input type=hidden name="additional_zip_original" value="<%= @more_served_areas %>">
+  
   <div class="field">
     <%= f.label :phone %><br />
     <%= f.text_field :phone %>
