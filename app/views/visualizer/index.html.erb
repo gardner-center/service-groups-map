@@ -74,7 +74,7 @@
         <option value="9">9 AM</option>
         <option value="10">10 AM</option>
         <option value="11">11 AM</option>
-        <option value="12">12 pM</option>
+        <option value="12">12 PM</option>
         <option value="13">1 PM</option>
         <option value="14">2 PM</option>
         <option value="15">3 PM</option>
@@ -83,19 +83,14 @@
         <option value="18">6 PM</option>
         <option value="19">7 PM</option>
         <option value="20">8 PM</option>
-        <option value="21">9 PM</option>
       </select>  <br />
       End time:
       <select id="end_time" name="end_time">
         <option value="any" selected="selected">Any time</option>
-        <option value="5">5 AM</option>
-        <option value="6">6 AM</option>
-        <option value="7">7 AM</option>
-        <option value="8">8 AM</option>
         <option value="9">9 AM</option>
         <option value="10">10 AM</option>
         <option value="11">11 AM</option>
-        <option value="12">12 pM</option>
+        <option value="12">12 PM</option>
         <option value="13">1 PM</option>
         <option value="14">2 PM</option>
         <option value="15">3 PM</option>
@@ -105,6 +100,9 @@
         <option value="19">7 PM</option>
         <option value="20">8 PM</option>
         <option value="21">9 PM</option>
+        <option value="22">10 PM</option>
+        <option value="23">11 PM</option>
+        <option value="24">12 AM</option>
       </select>  
 
 
@@ -118,7 +116,22 @@
         <%= submit_tag "Geocode Address", :id => "geo-submit-button", :class => "button", :style => "display: none;" %>
       <% end %>
     <hr />
-    <a href="/find">Advanced find</a>
+    <a href="#" onclick="$('advanced_find').toggle();">Advanced find</a>
+    <div id="advanced_find" style="display: none;">
+      <%= form_tag "/visualize/find_advanced", :id => "advanced_find", :method => :post, :remote => true do %>
+        Search radius:
+        <select id="search_radius" name="search_radius" onChange="$('adv-find-button').click();">
+          <% [5,10,15,25,50].each do |radius| %>
+            <% if radius == @user_radius %>
+              <option value="<%= radius %>" selected="selected"><%= radius %></option>
+            <% else %>
+            <option value="<%= radius %>"><%= radius %></option>
+            <% end %>
+          <% end %>
+        </select>  
+        <%= submit_tag "Advanced Find", :id => "adv-find-button", :class => "button", :style => "display: none;" %>
+      <% end %>
+    </div>
     <hr />
 
   </td>

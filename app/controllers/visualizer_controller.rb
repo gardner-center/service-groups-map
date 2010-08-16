@@ -20,13 +20,10 @@ class VisualizerController < ApplicationController
                                      lon > (? - #{LATLON_DELTA}) AND 
                                      lon < (? + #{LATLON_DELTA})",
                                      @user_lat,@user_lat,@user_lon,@user_lon)
-#JBB can take these ids and add OR IN (2,3,4 - whatever is in additional_area_ids) to sql above
-    additional_area_ids = ServedArea.select('program_id').where("
-                                     lat > (? - #{LATLON_DELTA}) AND 
-                                     lat < (? + #{LATLON_DELTA}) AND 
-                                     lon > (? - #{LATLON_DELTA}) AND 
-                                     lon < (? + #{LATLON_DELTA})",
-                                     @user_lat,@user_lat,@user_lon,@user_lon)
+    #JBB right now we assume using a search radius accounts for zip codes served,
+    #but we could do a join search for programs that uses additional zip codes served
+    #additional_area_ids =  Program.joins(:served_areas).where('served_areas.lat > ?',@user_lat
+
     cull_based_on_proximity #See if within radius and delete if not
 
     respond_to do |format|
@@ -35,6 +32,7 @@ class VisualizerController < ApplicationController
   end
 
   def find_programs
+    debugger
     @notes = ""  #Use this to help people if they do things like specify a min_age > max_age
     @nearbyPrograms = [] #initialize
     @need_new_map = false #initialize
@@ -87,13 +85,13 @@ class VisualizerController < ApplicationController
     unless params[:start_time] == "any" && params[:end_time] == "any"
       begin
         #discard unless end_time after start time
-        if params[:start_time].to_i < params[:end_time].to_i
+        if ((params[:start_time].to_i < params[:end_time].to_i) || ((params[:start_time].to_i >= 3) && (params[:end_time].to_i == 0))) 
           st = params[:start_time].to_i - 2
           @pre_sql += " AND start_time > #{st}" unless st < 0
           et =  params[:end_time].to_i + 2
-          @pre_sql += " AND end_time < #{et}" unless et < 0
+          @pre_sql += " AND end_time < #{et}" unless et < 3
         else
-          @notes += " The time criteria was not used because it is not valid to have the end time fall before the start time."
+          @notes += " The time criteria was not used because the end time must fall before the start time."
         end
       rescue
         #proceed
@@ -160,19 +158,35 @@ class VisualizerController < ApplicationController
     end
   end
 
+  def find_advanced
+    begin
+      respond_to do |format|
+        format.js do
+          if ["5","10","15","25","50"].include?(params[:search_radius])
+            cookies.permanent[:radius] = params[:search_radius]
+            @user_radius = params[:search_radius].to_i
+#JBB. Since can't render more than once, plan is to direct to find_programs
+#However, that means we need to supply the appropriate variables.
+#Incumbent plan is to do this with hidden vars that get populated before
+#calling find_programs
+#Right now this bombs out at line 38 of find_programs and gets caught here
+#in rescue block
+            find_programs
+          else
+            render :nothing => true
+          end
+        end
+      end 
+    rescue
+      render :nothing => true
+    end
+  end
+
   def decline_instructions
     cookies.permanent[:show_instructions] = false
     render(:update) do |page|
       page[:instructions].hide
     end 
-
-  end
-
-  def advanced_find
-
-  end
-
-  def show_programs
 
   end
 

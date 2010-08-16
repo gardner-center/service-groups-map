@@ -78,7 +78,7 @@ class Program < ActiveRecord::Base
   end
 
   def create_formatted_characteristics
-    self.formatted_repeats = REPEATS[self.repeats][:name]
+    self.formatted_repeats = REPEATS[self.repeats - 1][:name]
     self.formatted_categories = ""
     self.categories.each_with_index do |category,index|
       self.formatted_categories += category.name
