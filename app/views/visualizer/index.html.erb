@@ -29,6 +29,11 @@
     $('zip_mirror').value = val;
   }
 
+  function doAdvFind(radius) {
+    $('radius').value = radius;
+    $('submit-button').click();
+  }
+
 
 </script>
 
@@ -105,6 +110,7 @@
         <option value="24">12 AM</option>
       </select>  
 
+      <input type="hidden" name="radius" id="radius" value="0">
 
       <br /><br />
       <%= submit_tag "Find Programs", :id => "submit-button", :class => "button" %>
@@ -120,7 +126,7 @@
     <div id="advanced_find" style="display: none;">
       <%= form_tag "/visualize/find_advanced", :id => "advanced_find", :method => :post, :remote => true do %>
         Search radius:
-        <select id="search_radius" name="search_radius" onChange="$('adv-find-button').click();">
+        <select id="search_radius" name="search_radius" onChange="doAdvFind(this.value);">
           <% [5,10,15,25,50].each do |radius| %>
             <% if radius == @user_radius %>
               <option value="<%= radius %>" selected="selected"><%= radius %></option>
@@ -129,6 +135,7 @@
             <% end %>
           <% end %>
         </select>  
+
         <%= submit_tag "Advanced Find", :id => "adv-find-button", :class => "button", :style => "display: none;" %>
       <% end %>
     </div>

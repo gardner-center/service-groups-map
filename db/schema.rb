@@ -20,6 +20,9 @@ ActiveRecord::Schema.define(:version => 20100815042606) do
     t.integer "program_id"
   end
 
+  add_index "categories_programs", ["category_id"], :name => "index_categories_programs_on_category_id"
+  add_index "categories_programs", ["program_id"], :name => "index_categories_programs_on_program_id"
+
   create_table "programs", :force => true do |t|
     t.integer  "service_group_id"
     t.string   "name"
@@ -56,7 +59,6 @@ ActiveRecord::Schema.define(:version => 20100815042606) do
 
   add_index "programs", ["lat"], :name => "index_programs_on_lat"
   add_index "programs", ["lon"], :name => "index_programs_on_lon"
-  add_index "programs", ["zipcode"], :name => "index_programs_on_zipcode"
 
   create_table "programs_service_people", :id => false, :force => true do |t|
     t.integer "service_person_id"

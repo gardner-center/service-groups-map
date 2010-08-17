@@ -32,13 +32,15 @@ class VisualizerController < ApplicationController
   end
 
   def find_programs
-    debugger
     @notes = ""  #Use this to help people if they do things like specify a min_age > max_age
     @nearbyPrograms = [] #initialize
     @need_new_map = false #initialize
 
     if !(params[:zip].empty?) && (cookies[:user_zip] != params[:zip])
       change_of_zip(params[:zip])
+    end
+    if params[:radius].to_i > 0 && params[:radius].to_i != @user_radius
+      modify_radius(params[:radius])
     end
     @user_zipcode = cookies[:user_zip]
     @pre_sql = "lat > (? - #{LATLON_DELTA}) AND 
@@ -158,27 +160,13 @@ class VisualizerController < ApplicationController
     end
   end
 
-  def find_advanced
+  def modify_radius(radius)
     begin
-      respond_to do |format|
-        format.js do
-          if ["5","10","15","25","50"].include?(params[:search_radius])
-            cookies.permanent[:radius] = params[:search_radius]
-            @user_radius = params[:search_radius].to_i
-#JBB. Since can't render more than once, plan is to direct to find_programs
-#However, that means we need to supply the appropriate variables.
-#Incumbent plan is to do this with hidden vars that get populated before
-#calling find_programs
-#Right now this bombs out at line 38 of find_programs and gets caught here
-#in rescue block
-            find_programs
-          else
-            render :nothing => true
-          end
-        end
-      end 
+      if ["5","10","15","25","50"].include?(radius)
+        cookies.permanent[:radius] = radius
+        @user_radius = radius.to_i
+      end
     rescue
-      render :nothing => true
     end
   end
 
