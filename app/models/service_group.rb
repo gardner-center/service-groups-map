@@ -11,7 +11,7 @@ class ServiceGroup < ActiveRecord::Base
   validates_presence_of :state
   validates :state, :state => true
   validates :zip, :length => {:minimum => 5, :maximum => 10}
-  validates_presence_of :inception_date
+  
 
   def capitalize_state
     self.state = self.state.upcase unless self.state.nil?
