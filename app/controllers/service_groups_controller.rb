@@ -83,7 +83,8 @@ class ServiceGroupsController < ApplicationController
   # DELETE /service_groups/1.xml
   def destroy
     @service_group = ServiceGroup.find(params[:id])
-    @service_group.destroy
+    result = @service_group.destroy
+    flash[:notice] = @service_group.errors[:base][0] if result == false
 
     respond_to do |format|
       format.html { redirect_to(service_groups_url) }
