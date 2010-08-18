@@ -6,7 +6,9 @@ class ApplicationController < ActionController::Base
   layout 'application'
 
   def ssl_required?
-    return false if request.remote_ip != "127.0.0.1" || RAILS_ENV == 'test'
+    #return false if request.remote_ip == "127.0.0.1" || RAILS_ENV == 'test'
+    return false if RAILS_ENV == 'test' || RAILS_ENV == 'development'
+    super
   end
 
   def invalid_route
