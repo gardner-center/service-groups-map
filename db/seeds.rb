@@ -5,11 +5,11 @@
 #
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
-#Repeat.create([{:name => 'Does not repeat'}, {:name => 'Daily'}, {:name => 'Mon-Fri'}, {:name => 'Mon/Wed/Fri'}, {:name => 'Tues/Thurs'}, {:name => 'Weekly'}, {:name => 'Monthly'}, {:name => 'Yearly'}])
+Repeat.create([{:name => 'Does not repeat'}, {:name => 'Daily'}, {:name => 'Mon-Fri'}, {:name => 'Mon/Wed/Fri'}, {:name => 'Tues/Thurs'}, {:name => 'Weekly'}, {:name => 'Monthly'}, {:name => 'Yearly'}])
 
-#Style.create([{:name => 'Drop-in'}, {:name => 'Set schedule'}])
+Style.create([{:name => 'Drop-in'}, {:name => 'Set schedule'}])
 
-#Category.create([{:name => 'Sports'}, {:name => 'Faith-based'}, {:name => 'Academic'}, {:name => 'Youth leadership'}, {:name => 'Community service'}, {:name => 'Enrichment'}, {:name => 'Arts & music'}, {:name => 'Vocational'}, {:name => 'Mentorship'}])
+Category.create([{:name => 'Sports'}, {:name => 'Faith-based'}, {:name => 'Academic'}, {:name => 'Youth leadership'}, {:name => 'Community service'}, {:name => 'Enrichment'}, {:name => 'Arts & music'}, {:name => 'Vocational'}, {:name => 'Mentorship'}])
 
 service_groups = ServiceGroup.create([{:name=> 'Project WeHOPE',:address1=> '1858-B Bay Road',:address2=> '',:city=> 'East Palo Alto',:state=> 'CA',:zip=> '94303',:phone=> '',:website=> 'http://www.projectwehope.org/',:inception_date=> ''}])
 service_group = ServiceGroup.create([{:name=> 'Bayshore Christian Ministries',:address1=> '1001 Beech Street',:address2=> '',:city=> 'East Palo Alto',:state=> 'CA',:zip=> '94303',:phone=> '(650) 327-1139',:website=> 'www.bayshore.org/',:inception_date=> ''}])
