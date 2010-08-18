@@ -16,8 +16,10 @@ deleteOverlays();
     detailsPhone = "#{program.phone}" 
     detailsURL = "#{program.website}" %>
     showOnMap(<%= program.lat %>, <%= program.lon %>,"<%= program.name %>","<%= details %>","<%= detailsPhone %>","<%= detailsURL %>",<%= index %>);
-    
-    listView(<%= index %>,"<%= program.name %>","<%= program.age_min %>","<%= program.age_max %>","<%= program.formatted_categories %>","<%= program.formatted_repeats %>","<%= program.formatted_hours %>"); 
+
+    <% if index < 20 %>
+      listView(<%= index %>,"<%= program.name %>","<%= program.age_min %>","<%= program.age_max %>","<%= program.formatted_categories %>","<%= program.formatted_repeats %>","<%= program.formatted_hours %>"); 
+    <% end %>
   <% end %>
 <% end %>
 

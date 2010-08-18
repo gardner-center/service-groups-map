@@ -51,7 +51,12 @@
 
     function showOnMap(lat,lon,name,details,detailsPhone,detailsURL,index)
     {
-      var image = 'images/red_Marker' + alphabetArray[index] + '.png';
+      var image;
+      if (index < 20) { 
+        image = 'images/red_Marker' + alphabetArray[index] + '.png';
+      } else {
+        image = 'images/red-dot.gif';
+      }
       var program_location = new google.maps.LatLng(lat,lon);
       var marker = new google.maps.Marker({
         position: program_location,
