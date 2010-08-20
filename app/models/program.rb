@@ -93,10 +93,16 @@ class Program < ActiveRecord::Base
       #need to pad zeros or get 16:0
       unless self.start_time > self.end_time
         self.formatted_hours = self.start_time.to_s.gsub(".",":")
-        self.formatted_hours += "0" if self.formatted_hours =~ /0$/
+        post_decimal = self.formatted_hours[/\:\d+/]
+        if post_decimal && post_decimal.length == 2
+          self.formatted_hours += "0"
+        end
         self.formatted_hours += " - "
         self.formatted_hours += self.end_time.to_s.gsub(".",":")
-        self.formatted_hours += "0" if self.formatted_hours =~ /0$/
+        post_decimal = end_time.to_s[/\.\d+/]
+        if post_decimal && post_decimal.length == 2
+          self.formatted_hours += "0"
+        end
       end
     end
   end
