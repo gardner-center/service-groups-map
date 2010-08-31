@@ -76,7 +76,12 @@ class StylesController < ApplicationController
   # DELETE /styles/1.xml
   def destroy
     @style = Style.find(params[:id])
-    @style.destroy
+    count = ActiveRecord::Base.connection.execute("select count(*) from programs_styles where style_id = #{@style.id}")
+    if count[0][0] > 0
+      flash[:notice] = "This style is in use by #{count[0][0]} program(s) and therefore cannot be deleted"
+    else
+      @style.destroy
+    end
 
     respond_to do |format|
       format.html { redirect_to(styles_url) }

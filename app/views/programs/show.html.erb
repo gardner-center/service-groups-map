@@ -33,7 +33,7 @@
 <p>
   <b>Repeats:</b>
   <% unless @program.repeats.nil? %>
-    <%= REPEATS[@program.repeats - 1][:name] %>
+    <%= REPEATS_HASH[@program.repeats] %>
   <% end %>
 </p>
 

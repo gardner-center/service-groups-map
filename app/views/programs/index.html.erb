@@ -1,5 +1,7 @@
 <h1>Listing programs</h1>
 
+<p id="notice"><%= notice %></p>
+
 <table>
   <tr class='heading'>
     <th>Name</th>
@@ -23,8 +25,6 @@
     <th></th>
   </tr>
 
-<% @repeat_options = Repeat.all %>
-<% @repeat_options.unshift("fill 0 index spot") %>
 <% @programs.each do |program| %>
   <tr class='<%= cycle("odd","even") %>'>
     <td><%= program.name %></td>
@@ -35,7 +35,7 @@
     <td><%= decimal_to_24hour_time(program.end_time) %></td>
     <td>
       <% unless program.repeats.nil? %>
-        <%= @repeat_options[program.repeats].name %>
+        <%= @repeat_options[program.repeats] %>
       <% end %>
     </td>
     <td><%= program.range %></td>

@@ -9,7 +9,7 @@
       <option value="">Please select a service group</option>
     <% for sg in ServiceGroup.order('name ASC') %>
       <% if !(@program.nil?) && sg.id == @program.service_group_id %>
-        <option value="<%= sg.id %>" "selected"><%= sg.name %></option>
+        <option value="<%= sg.id %>" selected="selected"><%= sg.name %></option>
       <% else %>
         <option value="<%= sg.id %>"><%= sg.name %></option>
       <% end %>

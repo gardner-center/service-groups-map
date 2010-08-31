@@ -77,8 +77,8 @@ class Program < ActiveRecord::Base
     self.formatted_address += self.city + ", " + self.state + ", " + self.zipcode + ", USA"
   end
 
-  def create_formatted_characteristics
-    self.formatted_repeats = REPEATS[self.repeats - 1][:name]
+  def create_formatted_characteristics #JBB Need a script to assign all programs to an existing repeats ID.
+    self.formatted_repeats = REPEATS_HASH[self.repeats]
     self.formatted_categories = ""
     self.categories.each_with_index do |category,index|
       self.formatted_categories += category.name

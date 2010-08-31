@@ -6,6 +6,7 @@ class ProgramsController < ApplicationController
 
   def index
     @programs = Program.order('name ASC')
+    @repeat_options = REPEATS_HASH
 
     respond_to do |format|
       format.html # index.html.erb

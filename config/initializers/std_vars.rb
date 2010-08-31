@@ -4,8 +4,20 @@ HOME_LAT = 37.455641
 HOME_LON = -122.131902
 DEFAULT_RADIUS = 15
 REPEATS = Repeat.all #Fails if DB not initializd
+REPEATS_HASH = {}
+for repeat in REPEATS
+  REPEATS_HASH[repeat[:id]] = repeat[:name]
+end
 CATEGORIES = Category.all  #Fails if DB not initialized
+CATEGORIES_HASH = {}
+for category in CATEGORIES
+  CATEGORIES_HASH[category[:id]] = category[:name]
+end
 STYLES = Style.all  #Fails if DB not initialized
+STYLES_HASH = {}
+for style in STYLES
+  STYLES_HASH[style[:id]] = style[:name]
+end
 STATES = {
   :AK => "Alaska",
   :AL => "Alabama",

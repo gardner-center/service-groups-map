@@ -76,7 +76,8 @@ class RepeatsController < ApplicationController
   # DELETE /repeats/1.xml
   def destroy
     @repeat = Repeat.find(params[:id])
-    @repeat.destroy
+    result = @repeat.destroy
+    flash[:notice] = @repeat.errors[:base][0] if result == false
 
     respond_to do |format|
       format.html { redirect_to(repeats_url) }

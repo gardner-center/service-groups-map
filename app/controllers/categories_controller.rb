@@ -76,8 +76,13 @@ class CategoriesController < ApplicationController
   # DELETE /categories/1.xml
   def destroy
     @category = Category.find(params[:id])
-    @category.destroy
-
+    count = ActiveRecord::Base.connection.execute("select count(*) from categories_programs where category_id = #{@category.id}")
+    if count[0][0] > 0
+      flash[:notice] = "This category is in use by #{count[0][0]} program(s) and therefore cannot be deleted"
+    else
+      @category.destroy
+    end
+    
     respond_to do |format|
       format.html { redirect_to(categories_url) }
       format.xml  { head :ok }

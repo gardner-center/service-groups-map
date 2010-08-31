@@ -19,7 +19,7 @@ class ServiceGroup < ActiveRecord::Base
 
   def check_for_actives
     if (self.service_persons.count + self.programs.count) > 0
-      errors.add_to_base("People and/or programs are still associated with this group, so it cannot be deleted")
+      errors[:base] << "People and/or programs are still associated with this group, so it cannot be deleted"
       false
     end
   end
