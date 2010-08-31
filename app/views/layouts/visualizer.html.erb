@@ -67,7 +67,7 @@
       markersArray.push(marker);
       
       var contentString = "<div class='popUp'><span class='popUpTop'>" + name + "</span><br />" + details + "<br />" + 
-                           detailsPhone + "<br />" + detailsURL + "</div>";
+                           detailsPhone + "<br /><a href='" + detailsURL + "'>" + detailsURL + "</div>";
       var infowindow = new google.maps.InfoWindow({
         content: contentString,
         maxWidth: 350
