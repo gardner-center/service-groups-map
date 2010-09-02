@@ -7,31 +7,7 @@ class Program < ActiveRecord::Base
   has_many :served_areas
  
   before_validation :capitalize_state
-  before_save :create_formatted_address, :get_lat_lon, :create_formatted_characteristics
-
-  scope :within_miles_of_zip, lambda{|radius, zip| #this is interesting, but does
-                                                   #not work in present form as
-                                                   #zip table not associated with 
-                                                   #program tables anymore. We don't
-                                                   #want zip table associated, so
-                                                   #this should be fixed another way
-
-
-    area = zip.area_for(radius)
-
-    # now find all zip codes that are within 
-    # these min/max lat/lon bounds and return them
-    # weed out any zip codes that fall outside of the search radius
-    { :select => "#{Program.columns.map{|c| "programs.#{c.name}"}.join(', ')}, sqrt( 
-        pow(#{area[:lat_miles]} * (zips.lat - #{zip.lat}),2) + 
-        pow(#{area[:lon_miles]} * (zips.lon - #{zip.lon}),2)) as distance",
-      :joins => :zip,
-      :conditions => "(zips.lat BETWEEN #{area[:min_lat]} AND #{area[:max_lat]}) 
-        AND (zips.lon BETWEEN #{area[:min_lon]} AND #{area[:max_lon]}) 
-        AND sqrt(pow(#{area[:lat_miles]} * (zips.lat - #{zip.lat}),2) + 
-        pow(#{area[:lon_miles]} * (zips.lon - #{zip.lon}),2)) <= #{area[:radius]}",
-      :order => "distance"}
-  }
+  before_save :create_formatted_address, :get_lat_lon, :create_formatted_characteristics, :hyperlink_url
 
   validates_presence_of :service_group_id, :message => "must be selected"
   validates_presence_of :name
@@ -69,7 +45,7 @@ class Program < ActiveRecord::Base
 
   def create_formatted_address
     self.formatted_address = self.address1
-    unless self.address2.nil?
+    unless self.address2.nil? || self.address2.blank?
       self.formatted_address += " " + self.address2 + ", "
     else
       self.formatted_address += ", "
@@ -92,19 +68,31 @@ class Program < ActiveRecord::Base
     unless self.start_time.nil? || self.end_time.nil?
       #need to pad zeros or get 16:0
       unless self.start_time > self.end_time
-        self.formatted_hours = self.start_time.to_s.gsub(".",":")
-        post_decimal = self.formatted_hours[/\:\d+/]
-        if post_decimal && post_decimal.length == 2
-          self.formatted_hours += "0"
-        end
+        self.formatted_hours = pretty_time(self.start_time)
+        #self.formatted_hours = self.start_time.to_s.gsub(".",":")
+        #post_decimal = self.formatted_hours[/\:\d+/]
+        #if post_decimal && post_decimal.length == 2
+        #  self.formatted_hours += "0"
+        #end
         self.formatted_hours += " - "
-        self.formatted_hours += self.end_time.to_s.gsub(".",":")
-        post_decimal = end_time.to_s[/\.\d+/]
-        if post_decimal && post_decimal.length == 2
-          self.formatted_hours += "0"
-        end
+        self.formatted_hours += pretty_time(self.end_time)
+        #self.formatted_hours += " - "
+        #self.formatted_hours += self.end_time.to_s.gsub(".",":")
+        #post_decimal = end_time.to_s[/\.\d+/]
+        #if post_decimal && post_decimal.length == 2
+        #  self.formatted_hours += "0"
+        #end
       end
+    else
+      self.formatted_hours = ""
     end
+  end
+
+  def hyperlink_url
+    unless self.website.blank?
+      self.website = "http://" + self.website unless self.website[/^http/]
+    end
+
   end
 
   ###This method is called anytime a program is created or updated and it uses the google maps API
@@ -123,6 +111,22 @@ class Program < ActiveRecord::Base
     rescue
       errors.add(:lat, "problem retrieving lat/long")
     end
+  end
+
+  def pretty_time(time)
+    time > 12 ? new_time = time - 12 : new_time = time
+    new_time = new_time.to_s
+    new_time.gsub!(".",":")
+    post_decimal = new_time[/\:\d+/]
+    if post_decimal && post_decimal.length == 2
+      new_time += "0"
+    end
+    if time < 12
+      new_time += " AM"
+    else
+      new_time += " PM"
+    end
+    new_time
   end
 
 end

@@ -220,6 +220,7 @@ class ProgramsController < ApplicationController
   end
 
   def format_time(time_string = "") #JBB check on this as default value
+    @numeric_time = nil
     if time_string.length > 0
       time_string.downcase =~ /pm/ ? add_twelve = true : add_twelve = false
       time_string.gsub!(":",".")
