@@ -25,7 +25,7 @@ deleteOverlays();
 
 
 <% if @change_zip_problem == true %>
-  var errorMsg = "The address you entered was not recognized, so the address being used in your search remains" + "<%= @user_zipcode %><br />"
+  var errorMsg = "<%= @err_msgs[:address_not_recognized] %> " + "<%= @user_zipcode %><br />"
   $("directionNotes").insert ({top: errorMsg})
   $("directionNotes").highlight({duration: 10})
   $("directionNotes").fade({duration: 15.0})

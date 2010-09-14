@@ -99,7 +99,7 @@
     {
       if (index == 0) {
         var head_html = "<table width='100%'><tr class='even'><th width='5%'>Label</th><th width='30%'>Name</th><th width='10%'>Ages</th><th width='25%'>Type(s)</th>"
-        head_html += "<th width='15%'>Schedule</th><th width='15%'>Hours</th></tr></table>"
+        head_html += "<th width='15%'>Schedule</th><th width='15%'><%= @localized_messaging[:hours] %></th></tr></table>"
         $("listPane").insert(head_html)
       }
       var style = ['odd','even'];
@@ -143,12 +143,25 @@
 
     </script>
 
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4880637-3']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
 
 </head>
 <body onload="initialize(); drawPrograms()">
 <% if @show_instructions == "true" %>
   <div id="instructions">
-    <h3>Welcome.</h3>  
+    <h3><%= @localized_messaging[:welcome] %></h3>  
     <ul>
       <li>This application is for helping you find youth development programs near you. </li> 
       <li>When you press the "Find Programs" button, you will see programs displayed on the map.</li>
@@ -163,6 +176,7 @@
   <ul>
     <li id="beta-note">Beta</li>
     <li id="home">Youth programs near: <span id="center_point"><%= @user_zipcode %></span></li>
+    <li id="language"><%= link_to 'English', 'visualize/language_preference/1' %> | <a href='visualize/language_preference/2'>Espa&ntilde;ol</a></li>
   </ul>
 </div>	
 

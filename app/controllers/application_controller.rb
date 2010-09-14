@@ -44,6 +44,37 @@ class ApplicationController < ActionController::Base
     @change_zip_problem = false
   end
 
+  def get_localized_messaging
+    if cookies[:language].nil?
+      cookies.permanent[:language] = "1"
+      @localized_messaging = ENGLISH_MESSAGING
+    else
+      case cookies[:language].to_i
+      when 1
+        @localized_messaging = ENGLISH_MESSAGING
+      when 2
+        @localized_messaging = SPANISH_MESSAGING
+      else
+        @localized_messaging = ENGLISH_MESSAGING
+      end
+    end
+  end
+
+  def get_localized_err_msgs
+    if cookies[:language].nil?
+      cookies.permanent[:language] = "1"
+      @err_msgs = ENGLISH_ERRORS
+    else
+      case cookies[:language].to_i
+      when 1
+        @err_msgs = ENGLISH_ERRORS
+      when 2
+        @err_msgs = SPANISH_ERRORS
+      else
+        @err_msgs = ENGLISH_ERRORS
+      end
+    end
+  end
 
   private
 

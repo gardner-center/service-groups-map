@@ -22,7 +22,7 @@ JgcMapping::Application.routes.draw do |map|
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
   match '/visualize' => 'visualizer#index'
-  match '/visualize/:action' => 'visualizer#view'
+  match '/visualize/:action/(:id)' => 'visualizer#view/(:id)'
   #match '/visualize/find_programs' => 'visualizer#find_programs'
   #match '/visualize/find_lat_lon' => 'visualizer#find_lat_lon'
   #match '/visualize/decline_instructions' => 'visualizer#decline_instructions'

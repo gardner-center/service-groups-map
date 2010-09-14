@@ -9,11 +9,13 @@ class VisualizerController < ApplicationController
   #culled based on the search radius specified
   #------------------------------------------------------------------
 
-  before_filter :establish_cookie
+  before_filter :establish_cookie 
 
   include Distance
   
   def index
+    get_localized_messaging
+    get_localized_err_msgs
     @user_zipcode = cookies[:user_zip]
     @nearbyPrograms = Program.where("lat > (? - #{LATLON_DELTA}) AND 
                                      lat < (? + #{LATLON_DELTA}) AND 
@@ -32,6 +34,7 @@ class VisualizerController < ApplicationController
   end
 
   def find_programs
+    get_localized_err_msgs
     @notes = ""  #Use this to help people if they do things like specify a min_age > max_age
     @nearbyPrograms = [] #initialize
     @need_new_map = false #initialize
@@ -175,7 +178,11 @@ class VisualizerController < ApplicationController
     render(:update) do |page|
       page[:instructions].hide
     end 
+  end
 
+  def language_preference
+    cookies.permanent[:language] = params[:id] ||= 1
+    redirect_to '/visualize'
   end
 
   private
