@@ -98,8 +98,8 @@
     function listView(index,name,ageMin,ageMax,categories,repeats,times)
     {
       if (index == 0) {
-        var head_html = "<table width='100%'><tr class='even'><th width='5%'>Label</th><th width='30%'>Name</th><th width='10%'>Ages</th><th width='25%'>Type(s)</th>"
-        head_html += "<th width='15%'>Schedule</th><th width='15%'><%= @localized_messaging[:hours] %></th></tr></table>"
+        var head_html = "<table width='100%'><tr class='even'><th width='5%'><%= @localized_messaging[:label] %></th><th width='30%'><%= @localized_messaging[:name] %></th><th width='10%'><%= @localized_messaging[:ages] %></th><th width='25%'><%= @localized_messaging[:type] %></th>"
+        head_html += "<th width='15%'><%= @localized_messaging[:schedule] %></th><th width='15%'><%= @localized_messaging[:hours] %></th></tr></table>"
         $("listPane").insert(head_html)
       }
       var style = ['odd','even'];
@@ -163,19 +163,19 @@
   <div id="instructions">
     <h3><%= @localized_messaging[:welcome] %></h3>  
     <ul>
-      <li>This application is for helping you find youth development programs near you. </li> 
-      <li>When you press the "Find Programs" button, you will see programs displayed on the map.</li>
-      <li>You can simply enter an address or zip code and press the "Find Programs" button or you may specify any additional criteria such as ages and the type of program (sports, faith baised, etc.) before you press the "Find Programs" button.</li>
-      <li>You can change your criteria and press the "Find Programs" button as many times as you wish.</li>
+      <li> <%= @localized_messaging[:welcome_bullet1] %></li> 
+      <li> <%= @localized_messaging[:welcome_bullet2] %></li> 
+      <li> <%= @localized_messaging[:welcome_bullet3] %></li> 
+      <li> <%= @localized_messaging[:welcome_bullet4] %></li> 
     </ul>
-    <%= link_to 'Do not show this message again', 'visualize/decline_instructions', :remote => true %>
+    <%= link_to @localized_messaging[:dont_show_message_again], 'visualize/decline_instructions', :remote => true %>
   </div>
 <% end %>
 
 <div id="nav">
   <ul>
     <li id="beta-note">Beta</li>
-    <li id="home">Youth programs near: <span id="center_point"><%= @user_zipcode %></span></li>
+    <li id="home"> <%= @localized_messaging[:youth_programs_near] %>: <span id="center_point"><%= @user_zipcode %></span></li>
     <li id="language"><%= link_to 'English', 'visualize/language_preference/1' %> | <a href='visualize/language_preference/2'>Espa&ntilde;ol</a></li>
   </ul>
 </div>	
@@ -190,7 +190,7 @@
 
 <div id="footer">
   <ul>
-    <li>This Web application is developed and maintained by the <a href="http://jgc.stanford.edu/">John Gardner Center</a> at Stanford University</li>
+    <li><%= @localized_messaging[:footer1] %> <a href="http://jgc.stanford.edu/">John Gardner Center</a> <%= @localized_messaging[:at] %> Stanford University</li>
   </ul>
   <div id="copyright" class="vcard">
   &copy; <span class="fn org">John Gardner Center</span>.  All Rights Reserved.  <span class="adr"><span class="locality">Stanford</span>, <span class="region">CA</span>  <span class="postal-code">94305</span></span>. <span class="tel">(650) 723-1137</span>.  <a href="http://www.stanford.edu/home/atoz/terms.html">Terms of Use</a>

@@ -41,19 +41,19 @@
 
 <table><tr>
   <td id="left-column" class="left-column">
-    <span id="basic-search">Find a program</span><br />
+    <span id="basic-search"><%= @localized_messaging[:find_a_program] %></span><br />
     
     <%= form_tag "/visualize/find_programs", :id => "service-group-list", :method => :post, :remote => true do %>
       <br />
-      Enter a zip or address:<br />
+      <%= @localized_messaging[:enter_a_zip_or_address] %>:<br />
       <input type="text" size="14" name="zip" id="zip" value="<%= @user_zipcode %>" onBlur="mirrorAddress(this.value); $('geo-submit-button').click();" /><br />
-      Ages: <input id="age_any" name="age_any" type="checkbox" value="1" checked="checked" onclick="$('age_detail').toggle(); return true;"/>Any<br /> 
+      <%= @localized_messaging[:ages] %>: <input id="age_any" name="age_any" type="checkbox" value="1" checked="checked" onclick="$('age_detail').toggle(); return true;"/><%= @localized_messaging[:any] %><br /> 
       <div id="age_detail" style="display: none;">
-        Age min:<input type="text" size="2" name="age_min" value="8" /><br />
-        Age max:<input type="text" size="2" name="age_max" value="14" />
+      <%= @localized_messaging[:age_min] %>:<input type="text" size="2" name="age_min" value="8" /><br />
+      <%= @localized_messaging[:age_max] %>:<input type="text" size="2" name="age_max" value="14" />
       </div>
 
-      Type: <input id="category_all" name="category_all" type="checkbox" value="1" checked="checked" onclick="$('category_list').toggle(); doUncheck(this.checked); return true;"/>Any<br /> 
+      <%= @localized_messaging[:type] %>:<input id="category_all" name="category_all" type="checkbox" value="1" checked="checked" onclick="$('category_list').toggle(); doUncheck(this.checked); return true;"/>Any<br /> 
 
       <div id="category_list" style="display: none;">
         <% for category in CATEGORIES %>
@@ -61,17 +61,17 @@
           <%= category[:name] %><br />
         <% end %>
       </div>
-      Day(s) offered:
+      <%= @localized_messaging[:days_offered] %>:
       <select id="program_repeats" name="program[repeats]">
-        <option value="any" selected="selected">Any day</option>
+        <option value="any" selected="selected"><%= @localized_messaging[:any_day] %></option>
         <% for repeat in REPEATS %>
           <option value="<%= repeat[:id] %>"><%= repeat[:name] %></option>
         <% end %>
       </select>  
       <br />
-      Start time:
+      <%= @localized_messaging[:start_time] %>:
       <select id="start_time" name="start_time">
-        <option value="any" selected="selected">Any time</option>
+        <option value="any" selected="selected"><%= @localized_messaging[:any_time] %></option>
         <option value="5">5 AM</option>
         <option value="6">6 AM</option>
         <option value="7">7 AM</option>
@@ -89,9 +89,9 @@
         <option value="19">7 PM</option>
         <option value="20">8 PM</option>
       </select>  <br />
-      End time:
+      <%= @localized_messaging[:end_time] %>:
       <select id="end_time" name="end_time">
-        <option value="any" selected="selected">Any time</option>
+        <option value="any" selected="selected"><%= @localized_messaging[:any_time] %></option>
         <option value="9">9 AM</option>
         <option value="10">10 AM</option>
         <option value="11">11 AM</option>
@@ -113,7 +113,7 @@
       <input type="hidden" name="radius" id="radius" value="0">
 
       <br /><br />
-      <%= submit_tag "Find Programs", :id => "submit-button", :class => "button" %>
+      <%= submit_tag @localized_messaging[:find_programs], :id => "submit-button", :class => "button" %>
     <% end %>
     <hr />
       <input type="button" value="Bicycle Paths", id="bicycling-button", class="button", onclick="toggleBicycleRoutes();"/>
@@ -122,10 +122,10 @@
         <%= submit_tag "Geocode Address", :id => "geo-submit-button", :class => "button", :style => "display: none;" %>
       <% end %>
     <hr />
-    <a href="#" onclick="$('advanced_find').toggle();">Advanced find</a>
+    <a href="#" onclick="$('advanced_find').toggle();"><%= @localized_messaging[:advanced_find] %></a>
     <div id="advanced_find" style="display: none;">
       <%= form_tag "/visualize/find_advanced", :id => "advanced_find", :method => :post, :remote => true do %>
-        Search radius:
+        <%= @localized_messaging[:search_radius] %>:
         <select id="search_radius" name="search_radius" onChange="doAdvFind(this.value);">
           <% [5,10,15,25,50].each do |radius| %>
             <% if radius == @user_radius %>
