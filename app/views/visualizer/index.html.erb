@@ -116,7 +116,7 @@
       <%= submit_tag @localized_messaging[:find_programs], :id => "submit-button", :class => "button" %>
     <% end %>
     <hr />
-      <input type="button" value="Bicycle Paths", id="bicycling-button", class="button", onclick="toggleBicycleRoutes();"/>
+      <input type="button" value='<%= @localized_messaging[:bicycle_paths] %>', id="bicycling-button", class="button", onclick="toggleBicycleRoutes();"/>
       <%= form_tag "/visualize/find_lat_lon", :id => "service-group-geo", :method => :post, :remote => true do %>
         <input type="hidden" name="zip_mirror" id="zip_mirror">
         <%= submit_tag "Geocode Address", :id => "geo-submit-button", :class => "button", :style => "display: none;" %>
